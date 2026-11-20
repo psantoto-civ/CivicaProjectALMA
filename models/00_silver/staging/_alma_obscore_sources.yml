@@ -1,0 +1,252 @@
+# =============================================================================
+#                           Sources from bronze
+# =============================================================================
+
+version: 2
+       
+sources:
+  - name: raw
+    database: "{{ env_var('DBT_BRONZE_DB') }}"
+    tables:
+      - name: obscore
+        description: "Tabla completa traída del TAP de ALMA. Incluye una fila por ventana espectral de cada observación realizada."
+        columns:
+          - name: obs_publisher_did
+            description: "publisher dataset identifier"
+            data_type: varchar
+          - name: obs_collection
+            description: "short name for the data collection"
+            data_type: varchar
+          - name: facility_name
+            description: "telescope name"
+            data_type: varchar
+          - name: instrument_name
+            description: "instrument name"
+            data_type: varchar
+          - name: obs_id
+            description: "internal dataset identifier, cut at 64 characters"
+            data_type: varchar
+          - name: dataproduct_type
+            description: "type of product"
+            data_type: varchar
+          - name: calib_level
+            description: "calibration level (2 or 3). 2 if product_type = MOUS, 3 if product_type = GOUS"
+            data_type: varchar
+          - name: collections
+            description: "Indicates that there are external products"
+            data_type: varchar
+          - name: target_name
+            description: "name of intended target, chosen by the PI"
+            data_type: varchar
+          - name: s_ra
+            description: "RA of central coordinates [deg]"
+            data_type: varchar
+          - name: s_dec
+            description: "DEC of central coordinates [deg]"
+            data_type: varchar
+          - name: s_fov
+            description: "size of the region covered (~diameter of minimum bounding circle) [deg]"
+            data_type: varchar
+          - name: s_region
+            description: "region bounded by observation"
+            data_type: varchar
+          - name: s_xel1
+            description: "Number of elements along the first spatial axis"
+            data_type: varchar
+          - name: s_xel2
+            description: "Number of elements along the second spatial axis"
+            data_type: varchar
+          - name: em_xel
+            description: "Number of elements along the spectral axis"
+            data_type: varchar
+          - name: t_xel
+            description: "Number of elements along the time axis"
+            data_type: varchar
+          - name: pol_xel
+            description: "Number of polarization samples"
+            data_type: varchar
+          - name: s_resolution
+            description: "typical spatial resolution [arcsec]"
+            data_type: varchar
+          - name: t_min
+            description: "start time of observation (MJD) [d]"
+            data_type: varchar
+          - name: t_max
+            description: "end time of observation (MJD) [d]"
+            data_type: varchar
+          - name: t_exptime
+            description: "exposure time of observation [s]"
+            data_type: varchar
+          - name: t_resolution
+            description: "typical temporal resolution [s]"
+            data_type: varchar
+          - name: em_min
+            description: "start spectral coordinate value [m]"
+            data_type: varchar
+          - name: em_max
+            description: "stop spectral coordinate value [m]"
+            data_type: varchar
+          - name: em_res_power
+            description: "typical spectral resolution"
+            data_type: varchar
+          - name: pol_states
+            description: "polarization states present in the data"
+            data_type: varchar
+          - name: cont_sensitivity_bandwidth
+            description: "Estimated noise in the aggregated continuum bandwidth. Note this is an indication only, it does not include the effects of flagging or dynamic range limitations. [mJy/beam]"
+            data_type: varchar
+          - name: pwv
+            description: "Estimated precipitable water vapour from the XML_CALWVR_ENTITIES table. [mm]"
+            data_type: varchar
+          - name: group_ous_uid
+            description: "Group OUS ID"
+            data_type: varchar
+          - name: member_ous_uid
+            description: "Member OUS ID"
+            data_type: varchar
+          - name: asdm_uid
+            description: "UID of the ASDM containing this Field."
+            data_type: varchar
+          - name: obs_title
+            description: "Case-insensitive search over the project title"
+            data_type: varchar
+          - name: type
+            description: "Type flags."
+            data_type: varchar
+          - name: scan_intent
+            description: "Scan intent list for the observed field."
+            data_type: varchar
+          - name: science_observation
+            description: "Flag to indicate whether this is a science observation."
+            data_type: varchar
+          - name: spatial_scale_max
+            description: "Due to the fact that radio antennas can not be placed infinitely close, measurements do have a smallest separation which translates into a maximal angular distance beyond which features can not be resolved reliably any more. Adding observations with the ALMA Total Power array can add those missing largest scales. [arcsec]"
+            data_type: varchar
+          - name: qa2_passed
+            description: "Quality Assessment 2 status: does the Member / Group OUS fulfil the PI's requirements?"
+            data_type: varchar
+          - name: bib_reference
+            description: "Bibliography code"
+            data_type: varchar
+          - name: science_keyword
+            data_type: varchar
+          - name: scientific_category
+            data_type: varchar
+          - name: pi_userid
+            data_type: varchar
+          - name: pi_name
+            data_type: varchar
+          - name: spectral_resolution
+            description: "[kHz]"
+            data_type: varchar
+          - name: o_ucd
+            description: "UCD describing the observable axis (pixel values)"
+            data_type: varchar
+          - name: access_url
+            description: "URL to download the data"
+            data_type: varchar
+          - name: access_format
+            description: "Content format of the data"
+            data_type: varchar
+          - name: access_estsize
+            description: "Estimated size of datasets in kilobytes [kbyte]"
+            data_type: varchar
+          - name: proposal_id
+            description: "Identifier of proposal to which an spw belongs."
+            data_type: varchar
+          - name: data_rights
+            description: "Access to data."
+            data_type: varchar
+          - name: gal_longitude
+            description: "Galactic longitude of the observation for RA/Dec. Estimated using PyEphem and RA/Dec. [deg]"
+            data_type: varchar
+          - name: gal_latitude
+            description: "Galactic latitude of the observation for RA/Dec. Estimated using PyEphem and RA/Dec. [deg]"
+            data_type: varchar
+          - name: band_list
+            description: "Space delimited list of bands"
+            data_type: varchar
+          - name: em_resolution
+            description: "Estimated frequency resolution from all the spectral windows, using median values of channel widths. [m]"
+            data_type: varchar
+          - name: bandwidth
+            description: "Total Bandwidth [Hz]"
+            data_type: varchar
+          - name: antenna_arrays
+            description: "Blank-separated list of Pad:Antenna pairs, i.e., A109:DV09 J504:DV02 J505:DV05 for antennas DV09, DV02 and DV05 sitting on pads A109, J504, and J505, respectively."
+            data_type: varchar
+          - name: is_mosaic
+            description: "Flag to indicate if this ASDM represents a mosaic or not."
+            data_type: varchar
+          - name: obs_release_date
+            description: "timestamp of date the data becomes publicly available"
+            data_type: varchar
+          - name: spatial_resolution
+            description: "Average of the maximum and minimum spatial resolution values of all spectral windows [arcsec]"
+            data_type: varchar
+          - name: frequency_support
+            description: "All frequency ranges used by the field [GHz]"
+            data_type: varchar
+          - name: frequency
+            description: "Observed (tuned) reference frequency on the sky. [GHz]"
+            data_type: varchar
+          - name: velocity_resolution
+            description: "Estimated velocity resolution from all the spectral windows, from frequency resolution. [m/s]"
+            data_type: varchar
+          - name: obs_creator_name
+            description: "case-insensitive partial match over the full PI name. Wildcards can be used"
+            data_type: varchar
+          - name: pub_title
+            description: "Case insensitive search through the title of the publication."
+            data_type: varchar
+          - name: first_author
+            description: "The first author as provided by telbib.eso.org."
+            data_type: varchar
+          - name: authors
+            description: "Full list of first author and all co-authors"
+            data_type: varchar
+          - name: pub_abstract
+            description: "Case insensitive text search through the abstract of the publication."
+            data_type: varchar
+          - name: publication_year
+            description: "The year the publication did appear in the printed version of the refereed journal."
+            data_type: varchar
+          - name: proposal_abstract
+            description: "Text search on the proposal abstract. Only abstracts will be returned which contain the given text. The search is case-insensitive."
+            data_type: varchar
+          - name: schedblock_name
+            description: "Name of the Scheduling Block used as a template for executing the ASDM containing this Field."
+            data_type: varchar
+          - name: proposal_authors
+            description: "Full name of CoIs ."
+            data_type: varchar
+          - name: sensitivity_10kms
+            description: "Estimated noise in an nominal 10km/s bandwidth. Note this is an indication only, it does not include the effects of flagging or Hanning smoothing, and a 10km/s bandwidth may not be achievable with the data as taken. [mJy/beam]"
+            data_type: varchar
+          - name: lastmodified
+            description: "Time stamp of last modification of the metadata"
+            data_type: varchar
+          - name: date_load
+            description: "Añadida por la ingesta: inicio de la extracción (UTC), igual para toda la ejecución de Alma_ingesta.py."
+            data_type: varchar
+          - name: _file_name
+            description: "Añadida por Snowflake (METADATA$FILENAME): ruta del fichero en el stage."
+            data_type: varchar
+          - name: _file_row_number
+            description: "Añadida por Snowflake (METADATA$FILE_ROW_NUMBER): número de fila dentro del fichero."
+            data_type: number
+          - name: _loaded_at
+            description: "Añadida por Snowflake (METADATA$START_SCAN_TIME): inicio del escaneo del COPY INTO."
+            data_type: timestamp_ltz
+          
+      - name: obsprojects
+        description: "Listado completo de proyectos del TAP en cada ejecución de la ingesta (solo inserciones). El primero (DATE_LOAD 2026-11-17 22:16:22) se creó a mano desde RAW.OBSCORE."
+        columns:
+          - name: proposal_id
+            description: "Identificador de propuesta. Es equivalente a proyecto."
+          - name: n_rows
+            description: "Número de ventanas espectrales (filas en raw.obscore) que perteneces a la misma propuesta (proyecto)"
+          - name: max_lastmodified
+            description: "Valor máximo de la columna lastModified dentro de la misma propuesta. Indica la última vez que el proyecto fue modificado en origen, sin incluir borrados"
+          - name: date_load
+            description: "Añadida por la ingesta: inicio de la extracción (UTC), igual para toda la ejecución de Alma_ingesta.py."
