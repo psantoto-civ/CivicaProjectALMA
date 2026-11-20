@@ -7,9 +7,14 @@ version: 2
 sources:
   - name: raw
     database: "{{ env_var('DBT_BRONZE_DB') }}"
+    schema: raw
     tables:
       - name: obscore
         description: "Tabla completa traída del TAP de ALMA. Incluye una fila por ventana espectral de cada observación realizada."
+        config:
+          loaded_at_field: "to_timestamp_ntz(date_load)"
+          freshness:
+            warn_after: {count: 8, period: day}
         columns:
           - name: obs_publisher_did
             description: "publisher dataset identifier"
@@ -240,13 +245,34 @@ sources:
             data_type: timestamp_ltz
           
       - name: obsprojects
-        description: "Listado completo de proyectos del TAP en cada ejecución de la ingesta (solo inserciones). El primero (DATE_LOAD 2026-11-17 22:16:22) se creó a mano desde RAW.OBSCORE."
+        description: "Listado completo de proyectos del TAP en cada ejecución de la ingesta (solo inserciones). Base del historial de proyectos (stg_alma__obsprojects_history) y de la gestión de borrados. El primero (DATE_LOAD 2026-11-17 22:16:22) se creó a mano desde RAW.OBSCORE (_file_name = 'bootstrap:RAW.OBSCORE')."
+        config:
+          loaded_at_field: "to_timestamp_ntz(date_load)"
+          freshness:
+            warn_after: {count: 8, period: day}
         columns:
           - name: proposal_id
             description: "Identificador de propuesta. Es equivalente a proyecto."
+            data_type: varchar
+            data_tests:
+              - not_null
           - name: n_rows
-            description: "Número de ventanas espectrales (filas en raw.obscore) que perteneces a la misma propuesta (proyecto)"
+            description: "Número de ventanas espectrales (filas en raw.obscore) que pertenecen a la misma propuesta (proyecto)."
+            data_type: varchar
           - name: max_lastmodified
-            description: "Valor máximo de la columna lastModified dentro de la misma propuesta. Indica la última vez que el proyecto fue modificado en origen, sin incluir borrados"
+            description: "Valor máximo de la columna lastModified dentro de la misma propuesta. Indica la última vez que el proyecto fue modificado en origen, sin incluir borrados."
+            data_type: varchar
           - name: date_load
             description: "Añadida por la ingesta: inicio de la extracción (UTC), igual para toda la ejecución de Alma_ingesta.py."
+            data_type: varchar
+            data_tests:
+              - not_null
+          - name: _file_name
+            description: "Añadida por Snowflake (METADATA$FILENAME): ruta del fichero en el stage. 'bootstrap:RAW.OBSCORE' en el listado inicial."
+            data_type: varchar
+          - name: _file_row_number
+            description: "Añadida por Snowflake (METADATA$FILE_ROW_NUMBER): número de fila dentro del fichero. Nulo en el listado inicial."
+            data_type: number
+          - name: _loaded_at
+            description: "Añadida por Snowflake (METADATA$START_SCAN_TIME): inicio del escaneo del COPY INTO. Momento del insert en el listado inicial."
+            data_type: timestamp_ltz

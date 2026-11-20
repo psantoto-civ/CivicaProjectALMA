@@ -39,15 +39,18 @@ models:
   
     00_silver:
       +database: "{{ env_var('DBT_SILVER_DB') }}"
+
       staging:
         +schema: staging
         +materialized: view
+
       intermediate:
         +schema: intermediate
         +materialized: incremental
         +incremental_strategy: delete+insert
         +unique_key: proposal_id
         +post-hook: "{{ delete_removed_projects() }}"
+        
       core:
         +schema: core
         +materialized: incremental
