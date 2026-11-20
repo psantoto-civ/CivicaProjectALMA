@@ -1,0 +1,51 @@
+# =============================================================================
+#                           Models for Staging
+# =============================================================================
+
+version: 2
+
+models:
+  - name: stg_alma_obscore
+    description: >
+      Versión vigente de ivoa.obscore, tipada y con unidades en el nombre de las columnas.
+      Una fila es una ventana espectral (no tiene clave natural fiable: obs_id está truncado
+      a 64 caracteres). Incremental con delete+insert por proposal_id: cada proyecto se
+      sustituye entero por su carga más reciente. Solo contiene proyectos con versión vigente
+      en stg_alma__obsprojects_history. obs_release_date es nulo cuando el origen trae el
+      marcador 3000-01-01.
+    columns:
+      - name: proposal_id
+        description: "Código del proyecto. Unidad de versión de esta tabla."
+        data_tests:
+          - not_null
+      - name: member_ous_uid
+        data_tests:
+          - not_null
+      - name: target_name
+        data_tests:
+          - not_null
+      - name: obs_release_date
+        description: "Fecha de publicación de los datos. Nulo si el origen trae 3000-01-01 (marcador; probablemente fecha no fijada)."
+      - name: date_load
+        description: "Inicio de la extracción de la carga de la que procede la fila (UTC)."
+        data_tests:
+          - not_null
+
+  - name: stg_alma_obsprojects_scd2
+    description: >
+      Historial (SCD tipo 2) de los proyectos del TAP a partir de RAW.OBSPROJECTS. Una fila
+      por versión: empieza cuando el proyecto aparece, reaparece o cambian n_rows /
+      max_last_modified_at; termina en la siguiente carga en la que cambia o ya no está.
+      Fechas de extracción (date_load), no de ejecución de dbt. Se recalcula entero.
+    columns:
+      - name: proposal_id
+        data_tests:
+          - not_null
+      - name: valid_from
+        description: "Carga (date_load) en la que empieza la versión."
+        data_tests:
+          - not_null
+      - name: valid_to
+        description: "Carga en la que la versión deja de ser vigente (cambio o borrado). Nulo si sigue vigente."
+      - name: is_current
+        description: "La versión sigue vigente en la última carga."
