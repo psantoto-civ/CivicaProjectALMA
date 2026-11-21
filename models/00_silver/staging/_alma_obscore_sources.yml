@@ -7,9 +7,14 @@ version: 2
 sources:
   - name: raw
     database: "{{ env_var('DBT_BRONZE_DB') }}"
+    schema: raw
     tables:
       - name: obscore
         description: "Tabla completa traída del TAP de ALMA. Incluye una fila por ventana espectral de cada observación realizada."
+        config:
+          loaded_at_field: "to_timestamp_ntz(date_load)"
+          freshness:
+            warn_after: {count: 8, period: day}
         columns:
           - name: obs_publisher_did
             description: "publisher dataset identifier"
@@ -239,14 +244,37 @@ sources:
             description: "Añadida por Snowflake (METADATA$START_SCAN_TIME): inicio del escaneo del COPY INTO."
             data_type: timestamp_ltz
           
-      - name: obsprojects
-        description: "Listado completo de proyectos del TAP en cada ejecución de la ingesta (solo inserciones). El primero (DATE_LOAD 2026-11-17 22:16:22) se creó a mano desde RAW.OBSCORE."
+      - name: obskeys
+        description: "Clave natural de ventana espectral (obs_id, target_name, sensitivity_10kms) de todas las filas que existen en ivoa.obscore en cada ejecución de la ingesta. Solo inserciones. Sirve para detectar ventanas borradas en el TAP. El primer listado (DATE_LOAD 2026-11-17 22:16:22) se creó a mano desde RAW.OBSCORE (_file_name = 'bootstrap:RAW.OBSCORE')."
+        config:
+          loaded_at_field: "to_timestamp_ntz(date_load)"
+          freshness:
+            warn_after: {count: 8, period: day}
         columns:
-          - name: proposal_id
-            description: "Identificador de propuesta. Es equivalente a proyecto."
-          - name: n_rows
-            description: "Número de ventanas espectrales (filas en raw.obscore) que perteneces a la misma propuesta (proyecto)"
-          - name: max_lastmodified
-            description: "Valor máximo de la columna lastModified dentro de la misma propuesta. Indica la última vez que el proyecto fue modificado en origen, sin incluir borrados"
+          - name: obs_id
+            description: "internal dataset identifier, cut at 64 characters"
+            data_type: varchar
+            data_tests:
+              - not_null
+          - name: target_name
+            description: "name of intended target, chosen by the PI"
+            data_type: varchar
+            data_tests:
+              - not_null
+          - name: sensitivity_10kms
+            description: "Estimated noise in an nominal 10km/s bandwidth [mJy/beam]. Forma parte de la clave: separa las ventanas que comparten (obs_id, target_name)."
+            data_type: varchar
+            data_tests:
+              - not_null
           - name: date_load
             description: "Añadida por la ingesta: inicio de la extracción (UTC), igual para toda la ejecución de Alma_ingesta.py."
+            data_type: varchar
+          - name: _file_name
+            description: "Añadida por Snowflake (METADATA$FILENAME). 'bootstrap:RAW.OBSCORE' en el listado inicial."
+            data_type: varchar
+          - name: _file_row_number
+            description: "Añadida por Snowflake (METADATA$FILE_ROW_NUMBER). Nulo en el listado inicial."
+            data_type: number
+          - name: _loaded_at
+            description: "Añadida por Snowflake (METADATA$START_SCAN_TIME). Momento del insert en el listado inicial."
+            data_type: timestamp_ltz
