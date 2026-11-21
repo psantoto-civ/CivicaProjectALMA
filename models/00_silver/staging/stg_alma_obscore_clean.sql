@@ -4,14 +4,12 @@
   - Clave: spw_id (macro alma_spw_id). Incremental estándar: merge por spw_id.
   - En cada ejecución solo se leen las cargas posteriores a la última incorporada; si una
     ventana viene en varias cargas pendientes, se queda la más reciente.
-  - Borrados: el post_hook delete_removed_spws quita las ventanas que no están en el último
-    listado de claves del TAP (RAW.OBSKEYS).
+  - Borrados: se avisa con warn mediante test singular, pero la ejecución continúa.
 #}
 {{ config(
     materialized='incremental',
-    incremental_strategy='merge',
+    incremental_strategy='delete+insert',
     unique_key='spw_id',
-    post_hook="{{ delete_removed_spws() }}"
 ) }}
 
 with new_loads as (

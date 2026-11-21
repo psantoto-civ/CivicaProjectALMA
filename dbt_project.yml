@@ -44,15 +44,10 @@ models:
         +schema: staging
         +materialized: view
 
-    #  intermediate:
-    #    +schema: intermediate
-    #    +materialized: incremental
-    #    +incremental_strategy: merge
-#
-    #  core:
-    #    +schema: core
-    #    +materialized: incremental
-    #    +incremental_strategy: merge
+      core:
+        +schema: core
+        +materialized: incremental
+        +incremental_strategy: delete+insert
 
 #    01_gold:
 #      +materialized: table
