@@ -1,0 +1,606 @@
+# =============================================================================
+#                           Models for Core
+# =============================================================================
+# 30 modelos en 3FN.
+
+version: 2
+
+models:
+  - name: spectral_windows
+    columns:
+      - name: spw_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_id
+      - name: em_min_m
+      - name: em_max_m
+      - name: em_res_power
+      - name: em_xel
+      - name: sensitivity_10kms_mjy_beam
+      - name: last_modified_at
+      - name: cont_sensitivity_bandwidth_mjy_beam
+      - name: spectral_resolution_khz
+      - name: em_resolution_m
+      - name: bandwidth_hz
+      - name: frequency_ghz
+      - name: scan_intent_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('scan_intent')
+                field: scan_intent_id
+      - name: target_sb_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('target_sb')
+                field: target_sb_id
+      - name: dataproduct_type_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dataproduct_type')
+                field: dataproduct_type_id
+      - name: observation_ucd_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('observation_ucd')
+                field: observation_ucd_id
+      - name: _date_load
+
+  - name: scan_intent
+    columns:
+      - name: scan_intent_id
+        data_tests:
+          - unique
+          - not_null
+      - name: scan_intent
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: target_sb
+    columns:
+      - name: target_sb_id
+        data_tests:
+          - unique
+          - not_null
+      - name: target_name
+      - name: s_fov_deg
+      - name: s_region
+      - name: t_min_mjd
+      - name: t_max_mjd
+      - name: t_exptime_s
+      - name: t_resolution_s
+      - name: s_resolution_arcsec
+      - name: pwv_mm
+      - name: asdm_uid
+      - name: science_observation
+      - name: spatial_scale_max_arcsec
+      - name: qa2_passed
+      - name: antenna_arrays
+      - name: is_mosaic
+      - name: obs_release_date
+      - name: spatial_resolution_arcsec
+      - name: frequency_support
+      - name: velocity_resolution_m_s
+      - name: pol_states
+      - name: target_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('targets')
+                field: target_id
+      - name: data_rights_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('data_rights')
+                field: data_rights_id
+      - name: sb_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('scheduling_blocks')
+                field: sb_id
+      - name: access_format_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('access_format')
+                field: access_format_id
+      - name: access_estsize_kb
+      - name: _date_load
+
+  - name: targets
+    columns:
+      - name: target_id
+        data_tests:
+          - unique
+          - not_null
+      - name: s_ra_deg
+      - name: s_dec_deg
+      - name: gal_longitude_deg
+      - name: gal_latitude_deg
+      - name: region_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('regions')
+                field: region_id
+      - name: _date_load
+
+  - name: data_rights
+    columns:
+      - name: data_rights_id
+        data_tests:
+          - unique
+          - not_null
+      - name: data_rights
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: regions
+    columns:
+      - name: region_id
+        data_tests:
+          - unique
+          - not_null
+      - name: region_code
+        data_tests:
+          - unique
+          - not_null
+      - name: region_name
+      - name: region_type
+      - name: priority
+      - name: rule
+      - name: ra_deg
+      - name: dec_deg
+      - name: gal_l_deg
+      - name: gal_b_deg
+      - name: radius_deg
+      - name: abs_l_max_deg
+      - name: abs_b_min_deg
+      - name: abs_b_max_deg
+      - name: note
+
+  - name: scheduling_blocks
+    columns:
+      - name: sb_id
+        data_tests:
+          - unique
+          - not_null
+      - name: s_xel1
+      - name: s_xel2
+      - name: t_xel
+      - name: pol_xel
+      - name: member_ous_uid
+        data_tests:
+          - unique
+          - not_null
+      - name: access_url
+      - name: schedblock_name
+      - name: calib_level_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('calib_level')
+                field: calib_level_id
+      - name: group_ous_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('group_ous')
+                field: group_ous_id
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('proposals')
+                field: proposal_hash_id
+      - name: _date_load
+
+  - name: calib_level
+    columns:
+      - name: calib_level_id
+        data_tests:
+          - unique
+          - not_null
+      - name: calib_level
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: dataproduct_type
+    columns:
+      - name: dataproduct_type_id
+        data_tests:
+          - unique
+          - not_null
+      - name: dataproduct_type
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: group_ous
+    columns:
+      - name: group_ous_id
+        data_tests:
+          - unique
+          - not_null
+      - name: group_ous_uid
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: proposals
+    columns:
+      - name: proposal_hash_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_abstract
+      - name: scientific_category_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('category')
+                field: scientific_category_id
+      - name: pi_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('pis')
+                field: pi_id
+      - name: publication_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('publications')
+                field: publication_id
+      - name: observation_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('observations')
+                field: observation_id
+      - name: _date_load
+
+  - name: proposal_keywords
+    columns:
+      - name: prop_key_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('proposals')
+                field: proposal_hash_id
+      - name: science_keyword_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('keywords')
+                field: science_keyword_id
+      - name: _date_load
+
+  - name: keywords
+    columns:
+      - name: science_keyword_id
+        data_tests:
+          - unique
+          - not_null
+      - name: science_keyword
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: category
+    columns:
+      - name: scientific_category_id
+        data_tests:
+          - unique
+          - not_null
+      - name: scientific_category
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: pis
+    columns:
+      - name: pi_id
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_userid
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_name
+      - name: _date_load
+
+  - name: proposal_bands
+    columns:
+      - name: prop_band_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('proposals')
+                field: proposal_hash_id
+      - name: band_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('bands')
+                field: band_id
+      - name: _date_load
+
+  - name: bands
+    columns:
+      - name: band_id
+        data_tests:
+          - unique
+          - not_null
+      - name: band_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: publications
+    columns:
+      - name: publication_id
+        data_tests:
+          - unique
+          - not_null
+      - name: bib_reference
+        data_tests:
+          - unique
+          - not_null
+      - name: pub_title
+      - name: pub_abstract
+      - name: publication_year
+      - name: first_author_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('authors')
+                field: author_id
+      - name: _date_load
+
+  - name: pub_authors
+    columns:
+      - name: pub_author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: publication_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('publications')
+                field: publication_id
+      - name: author_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('authors')
+                field: author_id
+      - name: _date_load
+
+  - name: prop_authors
+    columns:
+      - name: prop_author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: author_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('authors')
+                field: author_id
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('proposals')
+                field: proposal_hash_id
+      - name: _date_load
+
+  - name: authors
+    columns:
+      - name: author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: author_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: observations
+    columns:
+      - name: observation_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_title
+        data_tests:
+          - unique
+          - not_null
+      - name: observing_program_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('observing_programs')
+                field: observing_program_id
+      - name: collection_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('collections')
+                field: collection_id
+      - name: obs_collections_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('obs_collections')
+                field: obs_collections_id
+      - name: obs_creator_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('obs_creators')
+                field: obs_creator_id
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('facilities')
+                field: facility_id
+      - name: instrument_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('instruments')
+                field: instrument_id
+      - name: _date_load
+
+  - name: observing_programs
+    columns:
+      - name: observing_program_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_type
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: collections
+    columns:
+      - name: collection_id
+        data_tests:
+          - unique
+          - not_null
+      - name: collections
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: obs_collections
+    columns:
+      - name: obs_collections_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_collection
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: obs_creators
+    columns:
+      - name: obs_creator_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_creator_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: facilities
+    columns:
+      - name: facility_id
+        data_tests:
+          - unique
+          - not_null
+      - name: facility_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: instruments
+    columns:
+      - name: instrument_id
+        data_tests:
+          - unique
+          - not_null
+      - name: instrument_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: observation_ucd
+    columns:
+      - name: observation_ucd_id
+        data_tests:
+          - unique
+          - not_null
+      - name: o_ucd
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: access_format
+    columns:
+      - name: access_format_id
+        data_tests:
+          - unique
+          - not_null
+      - name: access_format
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
