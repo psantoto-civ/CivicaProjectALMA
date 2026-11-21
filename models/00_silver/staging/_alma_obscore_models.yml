@@ -1,51 +1,530 @@
 # =============================================================================
 #                           Models for Staging
 # =============================================================================
+# Descripciones de columnas en _alma_obscore_docs.md (bloques {% docs obscore_<columna> %}).
 
 version: 2
 
 models:
-  - name: stg_alma_obscore
+  - name: stg_alma_obscore_clean
     description: >
-      Versión vigente de ivoa.obscore, tipada y con unidades en el nombre de las columnas.
-      Una fila es una ventana espectral (no tiene clave natural fiable: obs_id está truncado
-      a 64 caracteres). Incremental con delete+insert por proposal_id: cada proyecto se
-      sustituye entero por su carga más reciente. Solo contiene proyectos con versión vigente
-      en stg_alma__obsprojects_history. obs_release_date es nulo cuando el origen trae el
-      marcador 3000-01-01.
+      Versión vigente de cada ventana espectral de ivoa.obscore, tipada y con unidades en el
+      nombre de las columnas. Una fila por spw_id. Incremental con merge por spw_id: solo
+      procesa cargas nuevas y, si una ventana viene en varias, se queda la más reciente. El
+      post_hook delete_removed_spws borra las ventanas que no están en el último listado de
+      claves del TAP. Es el modelo que leen los de la 3FN.
     columns:
-      - name: proposal_id
-        description: "Código del proyecto. Unidad de versión de esta tabla."
+      - name: spw_id
+        description: "{{ doc('obscore_spw_id') }}"
+        data_type: varchar
         data_tests:
           - not_null
+          - unique
+      - name: proposal_id
+        description: "{{ doc('obscore_proposal_id') }}"
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: obs_publisher_did
+        description: "{{ doc('obscore_obs_publisher_did') }}"
+        data_type: varchar
+      - name: group_ous_uid
+        description: "{{ doc('obscore_group_ous_uid') }}"
+        data_type: varchar
       - name: member_ous_uid
+        description: "{{ doc('obscore_member_ous_uid') }}"
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: asdm_uid
+        description: "{{ doc('obscore_asdm_uid') }}"
+        data_type: varchar
+      - name: obs_id
+        description: "{{ doc('obscore_obs_id') }}"
+        data_type: varchar
+      - name: target_name
+        description: "{{ doc('obscore_target_name') }}"
+        data_type: varchar
+      - name: schedblock_name
+        description: "{{ doc('obscore_schedblock_name') }}"
+        data_type: varchar
+      - name: obs_title
+        description: "{{ doc('obscore_obs_title') }}"
+        data_type: varchar
+      - name: proposal_type
+        description: "{{ doc('obscore_proposal_type') }}"
+        data_type: varchar
+      - name: scientific_category
+        description: "{{ doc('obscore_scientific_category') }}"
+        data_type: varchar
+      - name: science_keyword
+        description: "{{ doc('obscore_science_keyword') }}"
+        data_type: varchar
+      - name: pi_userid
+        description: "{{ doc('obscore_pi_userid') }}"
+        data_type: varchar
+      - name: pi_name
+        description: "{{ doc('obscore_pi_name') }}"
+        data_type: varchar
+      - name: obs_creator_name
+        description: "{{ doc('obscore_obs_creator_name') }}"
+        data_type: varchar
+      - name: proposal_authors
+        description: "{{ doc('obscore_proposal_authors') }}"
+        data_type: varchar
+      - name: proposal_abstract
+        description: "{{ doc('obscore_proposal_abstract') }}"
+        data_type: varchar
+      - name: bib_reference
+        description: "{{ doc('obscore_bib_reference') }}"
+        data_type: varchar
+      - name: pub_title
+        description: "{{ doc('obscore_pub_title') }}"
+        data_type: varchar
+      - name: first_author
+        description: "{{ doc('obscore_first_author') }}"
+        data_type: varchar
+      - name: authors
+        description: "{{ doc('obscore_authors') }}"
+        data_type: varchar
+      - name: pub_abstract
+        description: "{{ doc('obscore_pub_abstract') }}"
+        data_type: varchar
+      - name: publication_year
+        description: "{{ doc('obscore_publication_year') }}"
+        data_type: integer
+      - name: obs_collection
+        description: "{{ doc('obscore_obs_collection') }}"
+        data_type: varchar
+      - name: facility_name
+        description: "{{ doc('obscore_facility_name') }}"
+        data_type: varchar
+      - name: instrument_name
+        description: "{{ doc('obscore_instrument_name') }}"
+        data_type: varchar
+      - name: dataproduct_type
+        description: "{{ doc('obscore_dataproduct_type') }}"
+        data_type: varchar
+      - name: calib_level
+        description: "{{ doc('obscore_calib_level') }}"
+        data_type: integer
+      - name: collections
+        description: "{{ doc('obscore_collections') }}"
+        data_type: varchar
+      - name: access_url
+        description: "{{ doc('obscore_access_url') }}"
+        data_type: varchar
+      - name: access_format
+        description: "{{ doc('obscore_access_format') }}"
+        data_type: varchar
+      - name: access_estsize_kb
+        description: "{{ doc('obscore_access_estsize_kb') }}"
+        data_type: integer
+      - name: data_rights
+        description: "{{ doc('obscore_data_rights') }}"
+        data_type: varchar
+      - name: obs_release_date
+        description: "{{ doc('obscore_obs_release_date') }}"
+        data_type: timestamp_ntz
+      - name: qa2_passed
+        description: "{{ doc('obscore_qa2_passed') }}"
+        data_type: boolean
+      - name: science_observation
+        description: "{{ doc('obscore_science_observation') }}"
+        data_type: boolean
+      - name: scan_intent
+        description: "{{ doc('obscore_scan_intent') }}"
+        data_type: varchar
+      - name: s_ra_deg
+        description: "{{ doc('obscore_s_ra_deg') }}"
+        data_type: float
+      - name: s_dec_deg
+        description: "{{ doc('obscore_s_dec_deg') }}"
+        data_type: float
+      - name: gal_longitude_deg
+        description: "{{ doc('obscore_gal_longitude_deg') }}"
+        data_type: float
+      - name: gal_latitude_deg
+        description: "{{ doc('obscore_gal_latitude_deg') }}"
+        data_type: float
+      - name: s_fov_deg
+        description: "{{ doc('obscore_s_fov_deg') }}"
+        data_type: float
+      - name: s_region
+        description: "{{ doc('obscore_s_region') }}"
+        data_type: varchar
+      - name: s_resolution_arcsec
+        description: "{{ doc('obscore_s_resolution_arcsec') }}"
+        data_type: float
+      - name: spatial_resolution_arcsec
+        description: "{{ doc('obscore_spatial_resolution_arcsec') }}"
+        data_type: float
+      - name: spatial_scale_max_arcsec
+        description: "{{ doc('obscore_spatial_scale_max_arcsec') }}"
+        data_type: float
+      - name: s_xel1
+        description: "{{ doc('obscore_s_xel1') }}"
+        data_type: integer
+      - name: s_xel2
+        description: "{{ doc('obscore_s_xel2') }}"
+        data_type: integer
+      - name: is_mosaic
+        description: "{{ doc('obscore_is_mosaic') }}"
+        data_type: boolean
+      - name: t_min_mjd
+        description: "{{ doc('obscore_t_min_mjd') }}"
+        data_type: float
+      - name: t_max_mjd
+        description: "{{ doc('obscore_t_max_mjd') }}"
+        data_type: float
+      - name: t_exptime_s
+        description: "{{ doc('obscore_t_exptime_s') }}"
+        data_type: float
+      - name: t_resolution_s
+        description: "{{ doc('obscore_t_resolution_s') }}"
+        data_type: float
+      - name: t_xel
+        description: "{{ doc('obscore_t_xel') }}"
+        data_type: integer
+      - name: band_list
+        description: "{{ doc('obscore_band_list') }}"
+        data_type: varchar
+      - name: frequency_ghz
+        description: "{{ doc('obscore_frequency_ghz') }}"
+        data_type: float
+      - name: frequency_support
+        description: "{{ doc('obscore_frequency_support') }}"
+        data_type: varchar
+      - name: bandwidth_hz
+        description: "{{ doc('obscore_bandwidth_hz') }}"
+        data_type: float
+      - name: em_min_m
+        description: "{{ doc('obscore_em_min_m') }}"
+        data_type: float
+      - name: em_max_m
+        description: "{{ doc('obscore_em_max_m') }}"
+        data_type: float
+      - name: em_resolution_m
+        description: "{{ doc('obscore_em_resolution_m') }}"
+        data_type: float
+      - name: em_res_power
+        description: "{{ doc('obscore_em_res_power') }}"
+        data_type: float
+      - name: em_xel
+        description: "{{ doc('obscore_em_xel') }}"
+        data_type: integer
+      - name: spectral_resolution_khz
+        description: "{{ doc('obscore_spectral_resolution_khz') }}"
+        data_type: float
+      - name: velocity_resolution_m_s
+        description: "{{ doc('obscore_velocity_resolution_m_s') }}"
+        data_type: float
+      - name: sensitivity_10kms_mjy_beam
+        description: "{{ doc('obscore_sensitivity_10kms_mjy_beam') }}"
+        data_type: float
+      - name: cont_sensitivity_bandwidth_mjy_beam
+        description: "{{ doc('obscore_cont_sensitivity_bandwidth_mjy_beam') }}"
+        data_type: float
+      - name: pol_states
+        description: "{{ doc('obscore_pol_states') }}"
+        data_type: varchar
+      - name: pol_xel
+        description: "{{ doc('obscore_pol_xel') }}"
+        data_type: integer
+      - name: o_ucd
+        description: "{{ doc('obscore_o_ucd') }}"
+        data_type: varchar
+      - name: pwv_mm
+        description: "{{ doc('obscore_pwv_mm') }}"
+        data_type: float
+      - name: antenna_arrays
+        description: "{{ doc('obscore_antenna_arrays') }}"
+        data_type: varchar
+      - name: last_modified_at
+        description: "{{ doc('obscore_last_modified_at') }}"
+        data_type: timestamp_ntz
+      - name: date_load
+        description: "{{ doc('obscore_date_load') }}"
+        data_type: timestamp_ntz
+        data_tests:
+          - not_null
+      - name: _file_name
+        description: "{{ doc('obscore__file_name') }}"
+        data_type: varchar
+      - name: _file_row_number
+        description: "{{ doc('obscore__file_row_number') }}"
+        data_type: number
+      - name: _loaded_at
+        description: "{{ doc('obscore__loaded_at') }}"
+        data_type: timestamp_ltz
+
+  - name: stg_alma_obscore_typed
+    description: >
+      Vista con el tipado 1:1 de RAW.OBSCORE: todas las cargas, sin filtrar ni deduplicar.
+      Casteo estricto (un valor no convertible hace fallar la consulta), unidades en el nombre
+      de las columnas (de TAP_SCHEMA.columns) y texto limpio (trim, '' -> nulo, sin cambiar
+      mayúsculas). obs_release_date = 3000-01-01 -> nulo. La lee stg_alma_obscore_clean.
+    columns:
+      - name: spw_id
+        description: "{{ doc('obscore_spw_id') }}"
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: proposal_id
+        description: "{{ doc('obscore_proposal_id') }}"
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: obs_publisher_did
+        description: "{{ doc('obscore_obs_publisher_did') }}"
+        data_type: varchar
+      - name: group_ous_uid
+        description: "{{ doc('obscore_group_ous_uid') }}"
+        data_type: varchar
+      - name: member_ous_uid
+        description: "{{ doc('obscore_member_ous_uid') }}"
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: asdm_uid
+        description: "{{ doc('obscore_asdm_uid') }}"
+        data_type: varchar
+      - name: obs_id
+        description: "{{ doc('obscore_obs_id') }}"
+        data_type: varchar
         data_tests:
           - not_null
       - name: target_name
+        description: "{{ doc('obscore_target_name') }}"
+        data_type: varchar
         data_tests:
           - not_null
+      - name: schedblock_name
+        description: "{{ doc('obscore_schedblock_name') }}"
+        data_type: varchar
+      - name: obs_title
+        description: "{{ doc('obscore_obs_title') }}"
+        data_type: varchar
+      - name: proposal_type
+        description: "{{ doc('obscore_proposal_type') }}"
+        data_type: varchar
+      - name: scientific_category
+        description: "{{ doc('obscore_scientific_category') }}"
+        data_type: varchar
+      - name: science_keyword
+        description: "{{ doc('obscore_science_keyword') }}"
+        data_type: varchar
+      - name: pi_userid
+        description: "{{ doc('obscore_pi_userid') }}"
+        data_type: varchar
+      - name: pi_name
+        description: "{{ doc('obscore_pi_name') }}"
+        data_type: varchar
+      - name: obs_creator_name
+        description: "{{ doc('obscore_obs_creator_name') }}"
+        data_type: varchar
+      - name: proposal_authors
+        description: "{{ doc('obscore_proposal_authors') }}"
+        data_type: varchar
+      - name: proposal_abstract
+        description: "{{ doc('obscore_proposal_abstract') }}"
+        data_type: varchar
+      - name: bib_reference
+        description: "{{ doc('obscore_bib_reference') }}"
+        data_type: varchar
+      - name: pub_title
+        description: "{{ doc('obscore_pub_title') }}"
+        data_type: varchar
+      - name: first_author
+        description: "{{ doc('obscore_first_author') }}"
+        data_type: varchar
+      - name: authors
+        description: "{{ doc('obscore_authors') }}"
+        data_type: varchar
+      - name: pub_abstract
+        description: "{{ doc('obscore_pub_abstract') }}"
+        data_type: varchar
+      - name: publication_year
+        description: "{{ doc('obscore_publication_year') }}"
+        data_type: integer
+      - name: obs_collection
+        description: "{{ doc('obscore_obs_collection') }}"
+        data_type: varchar
+      - name: facility_name
+        description: "{{ doc('obscore_facility_name') }}"
+        data_type: varchar
+      - name: instrument_name
+        description: "{{ doc('obscore_instrument_name') }}"
+        data_type: varchar
+      - name: dataproduct_type
+        description: "{{ doc('obscore_dataproduct_type') }}"
+        data_type: varchar
+      - name: calib_level
+        description: "{{ doc('obscore_calib_level') }}"
+        data_type: integer
+      - name: collections
+        description: "{{ doc('obscore_collections') }}"
+        data_type: varchar
+      - name: access_url
+        description: "{{ doc('obscore_access_url') }}"
+        data_type: varchar
+      - name: access_format
+        description: "{{ doc('obscore_access_format') }}"
+        data_type: varchar
+      - name: access_estsize_kb
+        description: "{{ doc('obscore_access_estsize_kb') }}"
+        data_type: integer
+      - name: data_rights
+        description: "{{ doc('obscore_data_rights') }}"
+        data_type: varchar
       - name: obs_release_date
-        description: "Fecha de publicación de los datos. Nulo si el origen trae 3000-01-01 (marcador; probablemente fecha no fijada)."
+        description: "{{ doc('obscore_obs_release_date') }}"
+        data_type: timestamp_ntz
+      - name: qa2_passed
+        description: "{{ doc('obscore_qa2_passed') }}"
+        data_type: boolean
+      - name: science_observation
+        description: "{{ doc('obscore_science_observation') }}"
+        data_type: boolean
+      - name: scan_intent
+        description: "{{ doc('obscore_scan_intent') }}"
+        data_type: varchar
+      - name: s_ra_deg
+        description: "{{ doc('obscore_s_ra_deg') }}"
+        data_type: float
+      - name: s_dec_deg
+        description: "{{ doc('obscore_s_dec_deg') }}"
+        data_type: float
+      - name: gal_longitude_deg
+        description: "{{ doc('obscore_gal_longitude_deg') }}"
+        data_type: float
+      - name: gal_latitude_deg
+        description: "{{ doc('obscore_gal_latitude_deg') }}"
+        data_type: float
+      - name: s_fov_deg
+        description: "{{ doc('obscore_s_fov_deg') }}"
+        data_type: float
+      - name: s_region
+        description: "{{ doc('obscore_s_region') }}"
+        data_type: varchar
+      - name: s_resolution_arcsec
+        description: "{{ doc('obscore_s_resolution_arcsec') }}"
+        data_type: float
+      - name: spatial_resolution_arcsec
+        description: "{{ doc('obscore_spatial_resolution_arcsec') }}"
+        data_type: float
+      - name: spatial_scale_max_arcsec
+        description: "{{ doc('obscore_spatial_scale_max_arcsec') }}"
+        data_type: float
+      - name: s_xel1
+        description: "{{ doc('obscore_s_xel1') }}"
+        data_type: integer
+      - name: s_xel2
+        description: "{{ doc('obscore_s_xel2') }}"
+        data_type: integer
+      - name: is_mosaic
+        description: "{{ doc('obscore_is_mosaic') }}"
+        data_type: boolean
+      - name: t_min_mjd
+        description: "{{ doc('obscore_t_min_mjd') }}"
+        data_type: float
+      - name: t_max_mjd
+        description: "{{ doc('obscore_t_max_mjd') }}"
+        data_type: float
+      - name: t_exptime_s
+        description: "{{ doc('obscore_t_exptime_s') }}"
+        data_type: float
+      - name: t_resolution_s
+        description: "{{ doc('obscore_t_resolution_s') }}"
+        data_type: float
+      - name: t_xel
+        description: "{{ doc('obscore_t_xel') }}"
+        data_type: integer
+      - name: band_list
+        description: "{{ doc('obscore_band_list') }}"
+        data_type: varchar
+      - name: frequency_ghz
+        description: "{{ doc('obscore_frequency_ghz') }}"
+        data_type: float
+      - name: frequency_support
+        description: "{{ doc('obscore_frequency_support') }}"
+        data_type: varchar
+      - name: bandwidth_hz
+        description: "{{ doc('obscore_bandwidth_hz') }}"
+        data_type: float
+      - name: em_min_m
+        description: "{{ doc('obscore_em_min_m') }}"
+        data_type: float
+      - name: em_max_m
+        description: "{{ doc('obscore_em_max_m') }}"
+        data_type: float
+      - name: em_resolution_m
+        description: "{{ doc('obscore_em_resolution_m') }}"
+        data_type: float
+      - name: em_res_power
+        description: "{{ doc('obscore_em_res_power') }}"
+        data_type: float
+      - name: em_xel
+        description: "{{ doc('obscore_em_xel') }}"
+        data_type: integer
+      - name: spectral_resolution_khz
+        description: "{{ doc('obscore_spectral_resolution_khz') }}"
+        data_type: float
+      - name: velocity_resolution_m_s
+        description: "{{ doc('obscore_velocity_resolution_m_s') }}"
+        data_type: float
+      - name: sensitivity_10kms_mjy_beam
+        description: "{{ doc('obscore_sensitivity_10kms_mjy_beam') }}"
+        data_type: float
+      - name: cont_sensitivity_bandwidth_mjy_beam
+        description: "{{ doc('obscore_cont_sensitivity_bandwidth_mjy_beam') }}"
+        data_type: float
+      - name: pol_states
+        description: "{{ doc('obscore_pol_states') }}"
+        data_type: varchar
+      - name: pol_xel
+        description: "{{ doc('obscore_pol_xel') }}"
+        data_type: integer
+      - name: o_ucd
+        description: "{{ doc('obscore_o_ucd') }}"
+        data_type: varchar
+      - name: pwv_mm
+        description: "{{ doc('obscore_pwv_mm') }}"
+        data_type: float
+      - name: antenna_arrays
+        description: "{{ doc('obscore_antenna_arrays') }}"
+        data_type: varchar
+      - name: last_modified_at
+        description: "{{ doc('obscore_last_modified_at') }}"
+        data_type: timestamp_ntz
       - name: date_load
-        description: "Inicio de la extracción de la carga de la que procede la fila (UTC)."
+        description: "{{ doc('obscore_date_load') }}"
+        data_type: timestamp_ntz
         data_tests:
           - not_null
+      - name: _file_name
+        description: "{{ doc('obscore__file_name') }}"
+        data_type: varchar
+      - name: _file_row_number
+        description: "{{ doc('obscore__file_row_number') }}"
+        data_type: number
+      - name: _loaded_at
+        description: "{{ doc('obscore__loaded_at') }}"
+        data_type: timestamp_ltz
 
-  - name: stg_alma_obsprojects_scd2
+  - name: stg_alma_obskeys_latest
     description: >
-      Historial (SCD tipo 2) de los proyectos del TAP a partir de RAW.OBSPROJECTS. Una fila
-      por versión: empieza cuando el proyecto aparece, reaparece o cambian n_rows /
-      max_last_modified_at; termina en la siguiente carga en la que cambia o ya no está.
-      Fechas de extracción (date_load), no de ejecución de dbt. Se recalcula entero.
+      Último listado de claves de ventana espectral del TAP (RAW.OBSKEYS), con spw_id
+      calculado con la misma macro que los datos. Vista. Lo usa delete_removed_spws.
     columns:
-      - name: proposal_id
+      - name: spw_id
+        description: "{{ doc('obscore_spw_id') }}"
+        data_type: varchar
         data_tests:
           - not_null
-      - name: valid_from
-        description: "Carga (date_load) en la que empieza la versión."
+          - unique
+      - name: date_load
+        description: "Carga (date_load) a la que pertenece el listado."
+        data_type: timestamp_ntz
         data_tests:
           - not_null
-      - name: valid_to
-        description: "Carga en la que la versión deja de ser vigente (cambio o borrado). Nulo si sigue vigente."
-      - name: is_current
-        description: "La versión sigue vigente en la última carga."
