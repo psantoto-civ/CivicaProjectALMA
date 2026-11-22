@@ -68,3 +68,28 @@ models:
       - name: gal_b_deg
       - name: radius_deg
       - name: note
+
+  - name: dim_pis
+    columns:
+      - name: pi_id
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_userid
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_name
+      - name: _date_load
+
+  - name: dim_scientific_category
+    columns:
+      - name: scientific_category_id
+        data_tests:
+          - unique
+          - not_null
+      - name: scientific_category
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
