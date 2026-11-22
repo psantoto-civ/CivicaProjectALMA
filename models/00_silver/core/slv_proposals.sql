@@ -9,6 +9,7 @@ proposals as (
         stg.scientific_category as scientific_category,
         stg.pi_userid as pi_userid,
         stg.bib_reference as bib_reference,
+        stg.obs_publisher_did as obs_publisher_did,
         stg.obs_title as obs_title,
         max(stg.date_load) as _date_load
     from {{ ref('stg_alma_obscore_clean') }} as stg
@@ -21,6 +22,7 @@ final as (
         {{ alma_proposal_hash_id('proposals.proposal_id') }} as proposal_hash_id,
         proposals.proposal_id as proposal_id,
         proposals.proposal_abstract as proposal_abstract,
+        proposals.obs_publisher_did as obs_publisher_did,
         {{ alma_scientific_category_id('proposals.scientific_category') }} as scientific_category_id,
         {{ alma_pi_id('proposals.pi_userid') }} as pi_id,
         {{ alma_publication_id('proposals.bib_reference') }} as publication_id,

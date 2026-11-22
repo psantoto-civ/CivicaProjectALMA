@@ -265,6 +265,7 @@ models:
           - unique
           - not_null
       - name: proposal_abstract
+      - name: obs_publisher_did
       - name: scientific_category_id
         data_tests:
           - relationships:
