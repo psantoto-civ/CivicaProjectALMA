@@ -11,11 +11,10 @@ changed_rows as (
         stg.s_xel1,
         stg.s_xel2,
         stg.t_xel,
-        stg.pol_xel,
         stg.access_url,
-        stg.schedblock_name,
         stg.calib_level,
         stg.group_ous_uid,
+        stg.collections as collections,
         stg.date_load
     from {{ ref('stg_alma_obscore_clean') }} as stg
     {{ alma_changed_keys_filter(['member_ous_uid']) }}
@@ -36,11 +35,10 @@ member_ous as (
         changed_rows.s_xel1,
         changed_rows.s_xel2,
         changed_rows.t_xel,
-        changed_rows.pol_xel,
         changed_rows.access_url,
-        changed_rows.schedblock_name,
         changed_rows.calib_level,
-        changed_rows.group_ous_uid
+        changed_rows.group_ous_uid,
+        changed_rows.collections
     from changed_rows
 ),
 
@@ -50,13 +48,12 @@ final as (
         member_ous.s_xel1,
         member_ous.s_xel2,
         member_ous.t_xel,
-        member_ous.pol_xel,
         member_ous.member_ous_uid,
         member_ous.access_url,
-        member_ous.schedblock_name,
         {{ alma_calib_level_id('member_ous.calib_level') }} as calib_level_id,
         {{ alma_group_ous_id('member_ous.group_ous_uid') }} as group_ous_id,
         {{ alma_proposal_hash_id('member_ous_proposals.proposal_id') }} as proposal_hash_id,
+        {{ alma_collection_id('member_ous.collections') }} as collection_id,
         member_ous_proposals._date_load
     from member_ous
     inner join member_ous_proposals

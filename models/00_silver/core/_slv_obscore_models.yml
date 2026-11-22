@@ -78,6 +78,8 @@ models:
       - name: t_exptime_s
       - name: t_resolution_s
       - name: s_resolution_arcsec
+      - name: pol_xel
+      - name: schedblock_name
       - name: pwv_mm
       - name: asdm_uid
       - name: science_observation
@@ -183,13 +185,11 @@ models:
       - name: s_xel1
       - name: s_xel2
       - name: t_xel
-      - name: pol_xel
       - name: member_ous_uid
         data_tests:
           - unique
           - not_null
       - name: access_url
-      - name: schedblock_name
       - name: calib_level_id
         data_tests:
           - not_null
@@ -210,6 +210,12 @@ models:
               arguments:
                 to: ref('slv_proposals')
                 field: proposal_hash_id
+      - name: collection_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_collections')
+                field: collection_id
       - name: _date_load
 
   - name: slv_calib_level
@@ -473,12 +479,6 @@ models:
               arguments:
                 to: ref('slv_observing_programs')
                 field: observing_program_id
-      - name: collection_id
-        data_tests:
-          - relationships:
-              arguments:
-                to: ref('slv_collections')
-                field: collection_id
       - name: obs_collections_id
         data_tests:
           - not_null
