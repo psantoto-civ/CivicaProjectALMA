@@ -149,8 +149,8 @@ typed as (
         {{ clean_string('scan_intent') }}                       as scan_intent,
 
         -- espacial
-        cast(s_ra as double)                                    as s_ra_deg,
-        cast(s_dec as double)                                   as s_dec_deg,
+        {{ round_deg('cast(s_ra as double)') }}                 as s_ra_deg,
+        {{ round_deg('cast(s_dec as double)') }}                as s_dec_deg,
         cast(gal_longitude as double)                           as gal_longitude_deg,
         cast(gal_latitude as double)                            as gal_latitude_deg,
         cast(s_fov as double)                                   as s_fov_deg,
