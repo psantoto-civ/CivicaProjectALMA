@@ -1,0 +1,39 @@
+# =====================================================================
+#                   Models for Gold/Core
+# =====================================================================
+
+version: 2
+
+models:
+  - name: fct_proposals_regions_bands
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - proposal_id
+              - region_id
+              - band_id
+    columns:
+      - name: band_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_bands')        # pasará a dim_bands
+                field: band_id
+      - name: proposal_id
+        data_tests:
+          - not_null
+      - name: region_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_regions')      # pasará a dim_regions
+                field: region_id
+      - name: n_spw_reg
+      - name: total_time_science_reg
+      - name: total_time_setup_reg
+      - name: total_time_reg
+      - name: date_start
+      - name: date_end
+      - name: _date_load
