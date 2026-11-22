@@ -4,7 +4,7 @@
 
 /*
 Incremental delete+insert por proyecto: se rehacen todas las filas de cada proyecto con alguna
-fila nueva en int_prop_regions o en slv_proposal_bands.
+fila nueva en int_proposal_regions o en slv_proposal_bands.
 */
 
 {{ config(unique_key='proposal_id') }}
@@ -14,7 +14,7 @@ with
 {% if is_incremental() %}
 changed_proposals as (
     select int_prop_regions.proposal_hash_id
-    from {{ ref('int_prop_regions') }} as int_prop_regions
+    from {{ ref('int_proposal_regions') }} as int_prop_regions
     where int_prop_regions._date_load > {{ alma_watermark() }}
     union
     select proposal_bands.proposal_hash_id

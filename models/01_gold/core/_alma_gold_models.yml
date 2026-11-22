@@ -18,7 +18,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('slv_bands')        # pasará a dim_bands
+                to: ref('dim_bands')
                 field: band_id
       - name: proposal_id
         data_tests:
@@ -28,7 +28,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('slv_regions')      # pasará a dim_regions
+                to: ref('dim_regions')
                 field: region_id
       - name: n_spw_reg
       - name: total_time_science_reg
@@ -37,3 +37,34 @@ models:
       - name: date_start
       - name: date_end
       - name: _date_load
+
+  - name: dim_bands
+    columns:
+      - name: band_id
+        data_tests:
+          - unique
+          - not_null
+      - name: band_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: dim_regions
+    columns:
+      - name: region_id
+        data_tests:
+          - unique
+          - not_null
+      - name: region_code
+        data_tests:
+          - unique
+          - not_null
+      - name: region_name
+      - name: region_type
+      - name: ra_deg
+      - name: dec_deg
+      - name: gal_l_deg
+      - name: gal_b_deg
+      - name: radius_deg
+      - name: note

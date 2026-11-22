@@ -27,7 +27,7 @@ final as (
         {{ alma_pi_id('proposals.pi_userid') }} as pi_id,
         {{ alma_publication_id('proposals.bib_reference') }} as publication_id,
         {{ alma_observation_id('proposals.obs_title') }} as observation_id,
-        proposals._date_load as date_load
+        proposals._date_load as _date_load
     from proposals
 )
 
