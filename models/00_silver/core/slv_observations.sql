@@ -26,7 +26,7 @@ final as (
         {{ alma_obs_creator_id('observations.obs_creator_name') }} as obs_creator_id,
         {{ alma_facility_id('observations.facility_name') }} as facility_id,
         {{ alma_instrument_id('observations.instrument_name') }} as instrument_id,
-        observations._date_load as date_load
+        observations._date_load as _date_load
     from observations
     where observations.obs_title is not null
 )

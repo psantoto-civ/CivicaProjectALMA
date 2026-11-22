@@ -1,0 +1,163 @@
+# =====================================================================
+#                   Models for Gold/Core
+# =====================================================================
+
+version: 2
+
+models:
+  - name: fct_proposals
+    columns:
+      - name: proposal_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_publisher_did
+      - name: proposal_abstract
+      - name: n_authors
+      - name: total_observing_time_science
+      - name: total_observing_time_setup
+      - name: total_observing_time
+      - name: date_start
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: date_day
+      - name: date_end
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: date_day
+      - name: total_time_span
+      - name: n_spws
+      - name: pi_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_pis')
+                field: pi_id
+      - name: scientific_category_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_scientific_category')
+                field: scientific_category_id
+      - name: _date_load
+
+  - name: fct_proposals_regions_bands
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - proposal_id
+              - region_id
+              - band_id
+    columns:
+      - name: band_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_bands')
+                field: band_id
+      - name: proposal_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('fct_proposals')
+                field: proposal_id
+      - name: region_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_regions')
+                field: region_id
+      - name: n_spw_reg
+      - name: total_time_science_reg
+      - name: total_time_setup_reg
+      - name: total_time_reg
+      - name: date_start
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: date_day
+      - name: date_end
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: date_day
+      - name: _date_load
+
+  - name: dim_bands
+    columns:
+      - name: band_id
+        data_tests:
+          - unique
+          - not_null
+      - name: band_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: dim_regions
+    columns:
+      - name: region_id
+        data_tests:
+          - unique
+          - not_null
+      - name: region_code
+        data_tests:
+          - unique
+          - not_null
+      - name: region_name
+      - name: region_type
+      - name: ra_deg
+      - name: dec_deg
+      - name: gal_l_deg
+      - name: gal_b_deg
+      - name: radius_deg
+      - name: note
+
+  - name: dim_pis
+    columns:
+      - name: pi_id
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_userid
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_name
+      - name: _date_load
+
+  - name: dim_scientific_category
+    columns:
+      - name: scientific_category_id
+        data_tests:
+          - unique
+          - not_null
+      - name: scientific_category
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: dim_fecha
+    columns:
+      - name: date_day
+        data_tests:
+          - unique
+          - not_null
+      - name: year
+      - name: semester
+      - name: quarter
+      - name: month
+      - name: month_name
+      - name: alma_cycle

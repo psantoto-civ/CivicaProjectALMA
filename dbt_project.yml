@@ -54,4 +54,8 @@ models:
         intermediate:
           +schema: intermediate
           +materialized: view
+        core:
+          +schema: core
+          +materialized: incremental
+          +incremental_strategy: delete+insert
    

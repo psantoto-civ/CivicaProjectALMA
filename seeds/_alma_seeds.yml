@@ -7,9 +7,11 @@ version: 2
 seeds:
   - name: alma_sky_regions
     description: >
-      Regiones fijas del cielo para clasificar observaciones.
-      Una fila por región. Gana la de menor 'priority': Sistema Solar (por nombre), conos de
-      menor a mayor radio, bulbo, plano y resto. `gal_l_deg`/`gal_b_deg` son los centros en coordenadas galáctica.
+      Regiones fijas del cielo para clasificar observaciones (ver 02_regiones_y_casos_de_uso.md).
+      Una fila por región. Gana la de menor `priority`: Sistema Solar (por nombre), conos de
+      menor a mayor radio, bulbo, plano y resto. Centros y radios aproximados: verificar en
+      SIMBAD. `gal_l_deg`/`gal_b_deg` son los centros en coordenadas galácticas, calculados
+      una vez desde `ra_deg`/`dec_deg` (ICRS -> galáctico).
     config:
       column_types:
         priority: number(3, 0)
@@ -70,9 +72,40 @@ seeds:
       - name: note
         description: Comentario.
     data_tests:
-      # Cada regla tiene los parámetros que necesita.
       - dbt_utils.expression_is_true:
           arguments:
             expression: >
               rule <> 'cone' or (gal_l_deg is not null and gal_b_deg is not null and radius_deg > 0)
       # Una sola región de respaldo y en la última posición: tests/singular/check_sky_region_fallback.sql
+
+  - name: alma_calendar
+    description: >
+      Calendario: un día por fila del 1999-01-01 al 2100-12-31. Generado con
+      scripts/generate_alma_calendar.py. alma_cycle = ciclo de observación de ALMA del día
+      (rangos contiguos; nulo fuera de los ciclos 0-13).
+    config:
+      column_types:
+        date_day: date
+        year: number(4, 0)
+        semester: number(1, 0)
+        quarter: number(1, 0)
+        month: number(2, 0)
+        month_name: varchar
+        alma_cycle: number(2, 0)
+    columns:
+      - name: date_day
+        description: Día (clave natural).
+        data_tests: [not_null, unique]
+      - name: year
+        description: Año.
+      - name: semester
+        description: Semestre del año (1-2).
+      - name: quarter
+        description: Trimestre del año (1-4).
+      - name: month
+        description: Número de mes (1-12).
+      - name: month_name
+        description: Nombre del mes (inglés).
+      - name: alma_cycle
+        description: Ciclo de observación de ALMA; nulo si el día no pertenece a ninguno.
+        
