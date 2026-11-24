@@ -1,0 +1,31 @@
+# ===========================================================
+#                   Intermediate Models for GOLD
+# ===========================================================
+
+version: 2
+
+models:
+  - name: int_proposal_regions
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - proposal_id
+              - region_id
+    columns:
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+      - name: proposal_id
+        data_tests:
+          - not_null
+      - name: region_id
+        data_tests:
+          - not_null
+      - name: n_spw_reg
+      - name: total_time_science_reg
+      - name: total_time_setup_reg
+      - name: total_time_reg
+      - name: t_min_mjd
+      - name: t_max_mjd
+      - name: _date_load

@@ -1,0 +1,35 @@
+# Valida la rama origen de cada PR según el flujo del proyecto (05_snowflake_setup.md):
+#   dev  <- feature/*, pre (back-merge tras un hotfix)
+#   pre  <- dev, main (back-merge tras un hotfix)
+#   main <- pre, hotfix/*
+
+name: Rama origen del PR
+
+on:
+  pull_request:
+    branches: [dev, pre, main]
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar rama origen
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          case "$BASE" in
+            dev)  [[ "$HEAD" == feature/* || "$HEAD" == "pre" ]] && ok=1 ;;
+            pre)  [[ "$HEAD" == "dev" || "$HEAD" == "main" ]] && ok=1 ;;
+            main) [[ "$HEAD" == "pre" || "$HEAD" == hotfix/* ]] && ok=1 ;;
+          esac
+          if [[ "${ok:-0}" != 1 ]]; then
+            echo "::error::No se permite un PR de '$HEAD' a '$BASE'."
+            echo "Permitido: dev <- feature/* | pre; pre <- dev | main; main <- pre | hotfix/*"
+            exit 1
+          fi
+          echo "PR de '$HEAD' a '$BASE': permitido."
+          

@@ -1,0 +1,45 @@
+priority,region_code,region_name,region_type,rule,ra_deg,dec_deg,gal_l_deg,gal_b_deg,radius_deg,abs_l_max_deg,abs_b_min_deg,abs_b_max_deg,note
+1,SOLAR_SYSTEM,Solar System,SOLAR_SYSTEM,name,,,,,,,,,"Assigned by target-name pattern (macro alma_is_solar_system_target); moving targets, coordinates not used"
+2,ARP_220,Arp 220,NEARBY_GALAXY,cone,233.738,23.503,36.6269,53.0288,0.1,,,,Centre and radius approximate; verify in SIMBAD
+3,NGC_3256,NGC 3256,NEARBY_GALAXY,cone,156.96,-43.9,277.3681,11.7293,0.1,,,,Centre and radius approximate; verify in SIMBAD
+4,ANTENNAE,Antennae,NEARBY_GALAXY,cone,180.47,-18.87,286.9584,42.4594,0.15,,,,Centre and radius approximate; verify in SIMBAD
+5,M51,M51,NEARBY_GALAXY,cone,202.47,47.2,104.8561,68.5563,0.2,,,,Centre and radius approximate; verify in SIMBAD
+6,NGC_1068,NGC 1068,NEARBY_GALAXY,cone,40.67,-0.013,172.1038,-51.9333,0.2,,,,Centre and radius approximate; verify in SIMBAD
+7,NGC_1097,NGC 1097,NEARBY_GALAXY,cone,41.58,-30.27,226.9033,-64.6800,0.2,,,,Centre and radius approximate; verify in SIMBAD
+8,NGC_1365,NGC 1365,NEARBY_GALAXY,cone,53.4,-36.14,237.9555,-54.5994,0.2,,,,Centre and radius approximate; verify in SIMBAD
+9,NGC_4945,NGC 4945,NEARBY_GALAXY,cone,196.36,-49.47,305.2690,13.3382,0.2,,,,Centre and radius approximate; verify in SIMBAD
+10,ABELL_1689,Abell 1689,LENSING_CLUSTER,cone,197.87,-1.34,313.3493,61.1257,0.3,,,,Centre and radius approximate; verify in SIMBAD
+11,ABELL_2744,Abell 2744,LENSING_CLUSTER,cone,3.586,-30.4,8.8189,-81.2410,0.3,,,,Centre and radius approximate; verify in SIMBAD
+12,ABELL_370,Abell 370,LENSING_CLUSTER,cone,39.97,-1.58,173.0094,-53.5597,0.3,,,,Centre and radius approximate; verify in SIMBAD
+13,BULLET_CLUSTER,Bullet cluster,LENSING_CLUSTER,cone,104.63,-55.95,266.0284,-21.2482,0.3,,,,Centre and radius approximate; verify in SIMBAD
+14,CENTAURUS_A,Centaurus A,NEARBY_GALAXY,cone,201.365,-43.019,309.5159,19.4174,0.3,,,,Centre and radius approximate; verify in SIMBAD
+15,M83,M83,NEARBY_GALAXY,cone,204.254,-29.866,314.5837,31.9724,0.3,,,,Centre and radius approximate; verify in SIMBAD
+16,MACS_J0416,MACS J0416,LENSING_CLUSTER,cone,64.04,-24.07,221.0913,-44.0566,0.3,,,,Centre and radius approximate; verify in SIMBAD
+17,MACS_J0717,MACS J0717,LENSING_CLUSTER,cone,109.38,37.75,180.2529,21.0433,0.3,,,,Centre and radius approximate; verify in SIMBAD
+18,MACS_J1149,MACS J1149,LENSING_CLUSTER,cone,177.4,22.4,228.1794,75.2006,0.3,,,,Centre and radius approximate; verify in SIMBAD
+19,NGC_253,NGC 253,NEARBY_GALAXY,cone,11.888,-25.288,97.3720,-87.9638,0.3,,,,Centre and radius approximate; verify in SIMBAD
+20,RXC_J2248,RXC J2248/AS1063,LENSING_CLUSTER,cone,342.18,-44.53,349.4823,-59.9318,0.3,,,,Centre and radius approximate; verify in SIMBAD
+21,ECDFS_UDF,ECDFS/UDF,DEEP_FIELD,cone,53.12,-27.8,223.5597,-54.4333,0.5,,,,Centre and radius approximate; verify in SIMBAD
+22,SSA22,SSA22,DEEP_FIELD,cone,334.4,0.3,63.1132,-43.9879,0.5,,,,Centre and radius approximate; verify in SIMBAD
+23,UDS,UDS,DEEP_FIELD,cone,34.5,-5.2,170.0190,-59.9033,0.7,,,,Centre and radius approximate; verify in SIMBAD
+24,COSMOS,COSMOS,DEEP_FIELD,cone,150.12,2.21,236.8183,42.1247,1.0,,,,Centre and radius approximate; verify in SIMBAD
+25,M33,M33,LOCAL_GROUP,cone,23.462,30.66,133.6102,-31.3309,1.0,,,,Centre and radius approximate; verify in SIMBAD
+26,GALACTIC_CENTER,Galactic Center (CMZ),GALACTIC,cone,266.417,-29.008,359.9442,-0.0464,1.5,,,,Centre and radius approximate; verify in SIMBAD
+27,M31,M31,LOCAL_GROUP,cone,10.685,41.269,121.1746,-21.5731,1.5,,,,Centre and radius approximate; verify in SIMBAD
+28,CARINA,Carina,SF_REGION,cone,161.3,-59.7,287.6198,-0.6350,2,,,,Centre and radius approximate; verify in SIMBAD
+29,COMA_CLUSTER,Coma cluster,GAL_CLUSTER,cone,194.95,27.98,58.0945,87.9603,2,,,,Centre and radius approximate; verify in SIMBAD
+30,FORNAX_CLUSTER,Fornax cluster,GAL_CLUSTER,cone,54.6,-35.45,236.7158,-53.6529,3,,,,Centre and radius approximate; verify in SIMBAD
+31,PERSEUS,Perseus,SF_REGION,cone,54.2,31.8,159.3857,-19.1241,3,,,,Centre and radius approximate; verify in SIMBAD
+32,SERPENS_AQUILA,Serpens/Aquila,SF_REGION,cone,277.5,0,30.4824,4.7684,3,,,,Centre and radius approximate; verify in SIMBAD
+33,CORONA_AUSTRALIS,Corona Australis,SF_REGION,cone,285.5,-37,359.8945,-17.8883,4,,,,Centre and radius approximate; verify in SIMBAD
+34,SMC,Small Magellanic Cloud,LOCAL_GROUP,cone,13.2,-72.8,302.7912,-44.3279,4,,,,Centre and radius approximate; verify in SIMBAD
+35,OPHIUCHUS,Ophiuchus,SF_REGION,cone,246.6,-24.3,353.1441,16.9836,5,,,,Centre and radius approximate; verify in SIMBAD
+36,CHAMAELEON,Chamaeleon,SF_REGION,cone,180,-77,299.9687,-14.4251,6,,,,Centre and radius approximate; verify in SIMBAD
+37,LUPUS,Lupus,SF_REGION,cone,240.5,-38,339.3236,11.0581,6,,,,Centre and radius approximate; verify in SIMBAD
+38,VIRGO_CLUSTER,Virgo cluster,GAL_CLUSTER,cone,187.7,12.4,283.7471,74.4979,6,,,,Centre and radius approximate; verify in SIMBAD
+39,ORION,Orion,SF_REGION,cone,83.8,-5.5,209.1062,-19.4504,7,,,,Centre and radius approximate; verify in SIMBAD
+40,LMC,Large Magellanic Cloud,LOCAL_GROUP,cone,80.9,-69.75,280.4576,-32.8875,8,,,,Centre and radius approximate; verify in SIMBAD
+41,TAURUS,Taurus,SF_REGION,cone,67.5,24.5,173.5495,-16.2347,9,,,,Centre and radius approximate; verify in SIMBAD
+42,GALACTIC_BULGE,Galactic Bulge,GALACTIC,galactic_box,,,,,,10,2,10,"|l|<10 and 2<=|b|<10, l in (-180,180]"
+43,GALACTIC_PLANE,Galactic Plane,GALACTIC,galactic_box,,,,,,,,5,"|b|<5, any l"
+44,OTHER,Other / high latitude,FALLBACK,fallback,,,,,,,,,"Everything else, including observations without galactic coordinates"

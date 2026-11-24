@@ -1,0 +1,473 @@
+# =============================================================================
+#                           Models for Core
+# =============================================================================
+
+
+version: 2
+
+models:
+  - name: slv_spectral_windows
+    columns:
+      - name: spw_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_id
+      - name: em_min_m
+      - name: em_max_m
+      - name: em_res_power
+      - name: em_xel
+      - name: sensitivity_10kms_mjy_beam
+      - name: last_modified_at
+      - name: cont_sensitivity_bandwidth_mjy_beam
+      - name: spectral_resolution_khz
+      - name: em_resolution_m
+      - name: bandwidth_hz
+      - name: frequency_ghz
+      - name: scan_intent
+        data_tests:
+          - not_null
+      - name: dataproduct_type
+      - name: o_ucd
+      - name: target_sb_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_target_sb')
+                field: target_sb_id
+      - name: _date_load
+
+  - name: slv_target_sb
+    columns:
+      - name: target_sb_id
+        data_tests:
+          - unique
+          - not_null
+      - name: target_name
+      - name: s_fov_deg
+      - name: s_region
+      - name: t_min_mjd
+      - name: t_max_mjd
+      - name: t_exptime_s
+      - name: t_resolution_s
+      - name: s_resolution_arcsec
+      - name: pwv_mm
+      - name: asdm_uid
+      - name: science_observation
+      - name: spatial_scale_max_arcsec
+      - name: qa2_passed
+      - name: antenna_arrays
+      - name: is_mosaic
+      - name: obs_release_date
+      - name: spatial_resolution_arcsec
+      - name: frequency_support
+      - name: velocity_resolution_m_s
+      - name: pol_states
+      - name: target_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_targets')
+                field: target_id
+      - name: data_rights
+      - name: sb_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_scheduling_blocks')
+                field: sb_id
+      - name: access_format
+      - name: access_estsize_kb
+      - name: pol_xel
+      - name: schedblock_name
+      - name: _date_load
+
+  - name: slv_targets
+    columns:
+      - name: target_id
+        data_tests:
+          - unique
+          - not_null
+      - name: s_ra_deg
+      - name: s_dec_deg
+      - name: gal_longitude_deg
+      - name: gal_latitude_deg
+      - name: region_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_regions')
+                field: region_id
+      - name: _date_load
+
+  - name: slv_regions
+    columns:
+      - name: region_id
+        data_tests:
+          - unique
+          - not_null
+      - name: region_code
+        data_tests:
+          - unique
+          - not_null
+      - name: region_name
+      - name: region_type
+      - name: priority
+      - name: rule
+      - name: ra_deg
+      - name: dec_deg
+      - name: gal_l_deg
+      - name: gal_b_deg
+      - name: radius_deg
+      - name: abs_l_max_deg
+      - name: abs_b_min_deg
+      - name: abs_b_max_deg
+      - name: note
+
+  - name: slv_scheduling_blocks
+    columns:
+      - name: sb_id
+        data_tests:
+          - unique
+          - not_null
+      - name: s_xel1
+      - name: s_xel2
+      - name: t_xel
+      - name: member_ous_uid
+        data_tests:
+          - unique
+          - not_null
+      - name: access_url
+      - name: calib_level_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_calib_level')
+                field: calib_level_id
+      - name: group_ous_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_group_ous')
+                field: group_ous_id
+      - name: collections
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_proposals')
+                field: proposal_hash_id
+      - name: _date_load
+
+  - name: slv_calib_level
+    columns:
+      - name: calib_level_id
+        data_tests:
+          - unique
+          - not_null
+      - name: calib_level
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_group_ous
+    columns:
+      - name: group_ous_id
+        data_tests:
+          - unique
+          - not_null
+      - name: group_ous_uid
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_proposals
+    columns:
+      - name: proposal_hash_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_abstract
+      - name: scientific_category_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_category')
+                field: scientific_category_id
+      - name: pi_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_pis')
+                field: pi_id
+      - name: publication_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_publications')
+                field: publication_id
+      - name: observation_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_observations')
+                field: observation_id
+      - name: _date_load
+
+  - name: slv_proposal_keywords
+    columns:
+      - name: prop_key_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_proposals')
+                field: proposal_hash_id
+      - name: science_keyword
+        data_tests:
+          - not_null
+      - name: _date_load
+
+  - name: slv_category
+    columns:
+      - name: scientific_category_id
+        data_tests:
+          - unique
+          - not_null
+      - name: scientific_category
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_pis
+    columns:
+      - name: pi_id
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_userid
+        data_tests:
+          - unique
+          - not_null
+      - name: pi_name
+      - name: _date_load
+
+  - name: slv_proposal_bands
+    columns:
+      - name: prop_band_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_proposals')
+                field: proposal_hash_id
+      - name: band_name
+        data_tests:
+          - not_null
+      - name: _date_load
+
+  - name: slv_publications
+    columns:
+      - name: publication_id
+        data_tests:
+          - unique
+          - not_null
+      - name: bib_reference
+        data_tests:
+          - unique
+          - not_null
+      - name: pub_title
+      - name: pub_abstract
+      - name: publication_year
+      - name: first_author_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('slv_authors')
+                field: author_id
+      - name: _date_load
+
+  - name: slv_pub_authors
+    columns:
+      - name: pub_author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: publication_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_publications')
+                field: publication_id
+      - name: author_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_authors')
+                field: author_id
+      - name: _date_load
+
+  - name: slv_prop_authors
+    columns:
+      - name: prop_author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: author_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_authors')
+                field: author_id
+      - name: proposal_hash_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_proposals')
+                field: proposal_hash_id
+      - name: _date_load
+
+  - name: slv_authors
+    columns:
+      - name: author_id
+        data_tests:
+          - unique
+          - not_null
+      - name: author_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_observations
+    columns:
+      - name: observation_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_title
+        data_tests:
+          - unique
+          - not_null
+      - name: observing_program_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_observing_programs')
+                field: observing_program_id
+      - name: obs_collections_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_obs_collections')
+                field: obs_collections_id
+      - name: obs_creator_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_obs_creators')
+                field: obs_creator_id
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_facilities')
+                field: facility_id
+      - name: instrument_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('slv_instruments')
+                field: instrument_id
+      - name: _date_load
+
+  - name: slv_observing_programs
+    columns:
+      - name: observing_program_id
+        data_tests:
+          - unique
+          - not_null
+      - name: proposal_type
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_obs_collections
+    columns:
+      - name: obs_collections_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_collection
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_obs_creators
+    columns:
+      - name: obs_creator_id
+        data_tests:
+          - unique
+          - not_null
+      - name: obs_creator_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_facilities
+    columns:
+      - name: facility_id
+        data_tests:
+          - unique
+          - not_null
+      - name: facility_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
+
+  - name: slv_instruments
+    columns:
+      - name: instrument_id
+        data_tests:
+          - unique
+          - not_null
+      - name: instrument_name
+        data_tests:
+          - unique
+          - not_null
+      - name: _date_load
