@@ -2,12 +2,14 @@
 --              fct_proposals
 -- =================================================
 
--- Grano: proyecto.
--- Tiempos y ventanas: suma de int_proposal_regions (las regiones reparten las observaciones,
--- así que la suma es exacta). Tiempos en horas; ciencia / setup según science_observation.
--- date_start / date_end: primera y última observación del proyecto; total_time_span en días (MJD).
--- Incremental delete+insert por proyecto: se rehacen los proyectos con alguna fila nueva en
--- slv_proposals, int_proposal_regions o slv_prop_authors.
+/*
+Grano: proyecto.
+Tiempos y ventanas: suma de int_proposal_regions (las regiones reparten las observaciones,
+así que la suma es exacta). Tiempos en horas; ciencia / setup según science_observation.
+date_start / date_end: primera y última observación del proyecto; total_time_span en días (MJD).
+Incremental merge por proyecto: se recalculan los proyectos con alguna fila nueva en
+slv_proposals, int_proposal_regions o slv_prop_authors.
+*/
 
 {{ config(unique_key='proposal_id') }}
 
