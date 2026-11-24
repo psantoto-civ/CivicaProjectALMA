@@ -48,8 +48,8 @@ models:
 
   - name: fct_proposals_regions_bands
     description: >
-      Proyecto × región × banda. Recuentos con proyectos distintos; horas repartidas entre las bandas
-      del proyecto (band_weight), exactas al sumar por región, proyecto o total. No usar horas por banda.
+      Proyecto x región x banda. Recuentos con proyectos distintos; horas repartidas entre las bandas
+      del proyecto (band_weight), exactas al sumar por región, proyecto o total. NO USAR HORAS POR BANDA.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -127,12 +127,21 @@ models:
           - not_null
       - name: region_name
       - name: region_type
+      - name: priority
+        data_tests:
+          - unique
+          - not_null
+      - name: rule
+        data_tests:
+          - not_null
       - name: ra_deg
       - name: dec_deg
       - name: gal_l_deg
       - name: gal_b_deg
       - name: radius_deg
-      - name: note
+      - name: abs_l_max_deg
+      - name: abs_b_min_deg
+      - name: abs_b_max_deg
 
   - name: dim_pis
     columns:
