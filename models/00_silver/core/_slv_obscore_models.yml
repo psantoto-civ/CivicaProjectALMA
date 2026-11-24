@@ -6,7 +6,7 @@
 version: 2
 
 models:
-  - name: spectral_windows
+  - name: slv_spectral_windows
     columns:
       - name: spw_id
         data_tests:
@@ -38,7 +38,7 @@ models:
                 field: target_sb_id
       - name: _date_load
 
-  - name: target_sb
+  - name: slv_target_sb
     columns:
       - name: target_sb_id
         data_tests:
@@ -85,7 +85,7 @@ models:
       - name: schedblock_name
       - name: _date_load
 
-  - name: targets
+  - name: slv_targets
     columns:
       - name: target_id
         data_tests:
@@ -104,7 +104,7 @@ models:
                 field: region_id
       - name: _date_load
 
-  - name: regions
+  - name: slv_regions
     columns:
       - name: region_id
         data_tests:
@@ -128,7 +128,7 @@ models:
       - name: abs_b_max_deg
       - name: note
 
-  - name: scheduling_blocks
+  - name: slv_scheduling_blocks
     columns:
       - name: sb_id
         data_tests:
@@ -165,7 +165,7 @@ models:
                 field: proposal_hash_id
       - name: _date_load
 
-  - name: calib_level
+  - name: slv_calib_level
     columns:
       - name: calib_level_id
         data_tests:
@@ -177,7 +177,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: group_ous
+  - name: slv_group_ous
     columns:
       - name: group_ous_id
         data_tests:
@@ -189,7 +189,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: proposals
+  - name: slv_proposals
     columns:
       - name: proposal_hash_id
         data_tests:
@@ -227,7 +227,7 @@ models:
                 field: observation_id
       - name: _date_load
 
-  - name: proposal_keywords
+  - name: slv_proposal_keywords
     columns:
       - name: prop_key_id
         data_tests:
@@ -245,7 +245,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: category
+  - name: slv_category
     columns:
       - name: scientific_category_id
         data_tests:
@@ -257,7 +257,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: pis
+  - name: slv_pis
     columns:
       - name: pi_id
         data_tests:
@@ -270,7 +270,7 @@ models:
       - name: pi_name
       - name: _date_load
 
-  - name: proposal_bands
+  - name: slv_proposal_bands
     columns:
       - name: prop_band_id
         data_tests:
@@ -288,7 +288,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: publications
+  - name: slv_publications
     columns:
       - name: publication_id
         data_tests:
@@ -309,7 +309,7 @@ models:
                 field: author_id
       - name: _date_load
 
-  - name: pub_authors
+  - name: slv_pub_authors
     columns:
       - name: pub_author_id
         data_tests:
@@ -331,7 +331,7 @@ models:
                 field: author_id
       - name: _date_load
 
-  - name: prop_authors
+  - name: slv_prop_authors
     columns:
       - name: prop_author_id
         data_tests:
@@ -353,7 +353,7 @@ models:
                 field: proposal_hash_id
       - name: _date_load
 
-  - name: authors
+  - name: slv_authors
     columns:
       - name: author_id
         data_tests:
@@ -365,7 +365,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: observations
+  - name: slv_observations
     columns:
       - name: observation_id
         data_tests:
@@ -412,7 +412,7 @@ models:
                 field: instrument_id
       - name: _date_load
 
-  - name: observing_programs
+  - name: slv_observing_programs
     columns:
       - name: observing_program_id
         data_tests:
@@ -424,7 +424,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: obs_collections
+  - name: slv_obs_collections
     columns:
       - name: obs_collections_id
         data_tests:
@@ -436,7 +436,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: obs_creators
+  - name: slv_obs_creators
     columns:
       - name: obs_creator_id
         data_tests:
@@ -448,7 +448,7 @@ models:
           - not_null
       - name: _date_load
 
-  - name: facilities
+  - name: slv_facilities
     columns:
       - name: facility_id
         data_tests:
@@ -460,13 +460,13 @@ models:
           - not_null
       - name: _date_load
 
-  - name: instruments
+  - name: slv_instruments
     columns:
       - name: instrument_id
         data_tests:
           - unique
           - not_null
-      - name: instrument_name
+      - name: slv_instrument_name
         data_tests:
           - unique
           - not_null
