@@ -2,7 +2,7 @@
 --                  dim_PIs
 -- ==========================================================
 
--- Grano: PI (pi_userid). Incremental delete+insert por pi_id: PIs nuevos o recalculados en slv_pis.
+-- Grano: PI (pi_userid). Incremental merge por pi_id: PIs nuevos o recalculados en slv_pis.
 {{ config(unique_key='pi_id') }}
 
 with

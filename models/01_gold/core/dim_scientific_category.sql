@@ -2,8 +2,11 @@
 --                  dim_scientific_category
 -- ==========================================================
 
--- Grano: categoría científica. Incremental delete+insert por scientific_category_id:
--- categorías nuevas de slv_category.
+/*
+Grano: categoría científica. Incremental merge por scientific_category_id:
+categorías nuevas de slv_category.
+*/
+
 {{ config(unique_key='scientific_category_id') }}
 
 with

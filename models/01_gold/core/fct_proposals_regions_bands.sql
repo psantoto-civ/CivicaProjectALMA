@@ -2,14 +2,19 @@
 --                  fct_proposals_regions_bands
 -- ===========================================================
 
--- Grano: proyecto × región × banda.
--- Recuentos: proyectos distintos por banda, región y ciclo (casos de uso 3, 4.1, 7).
--- No usar horas por banda.
--- date_start / date_end: las del proyecto (todas sus regiones), para cruzar con dim_fecha.
--- Incremental delete+insert por proyecto: se rehacen todas las filas de cada proyecto con alguna
--- fila nueva en int_proposal_regions o en slv_proposal_bands.
+/*
+Grano: proyecto x región x banda. PK de fila: proposal_region_band_id.
+Recuentos: proyectos distintos por banda, región y ciclo (casos de uso 3, 4.1, 7).
+Horas (casos e uso): las de proyecto x región (int_proposal_regions) multiplicadas por
+band_weight = 1 / n de bandas del proyecto (factor de reparto). Así un SUM por región, por proyecto
+o en total es exacto. Por banda, las horas son un reparto a partes iguales, no un tiempo medido:
+en Silver la banda está por proyecto, no por observación. No usar horas por banda.
+Un proyecto sin bandas tiene band_name nulo y su fila debe coincidir en el merge.
+Merge no borra filas que dejan de existir. Una (proyecto, región) solo
+desaparece si cambia el seed de regiones, y eso exige --full-refresh de Gold.
+*/
 
-{{ config(unique_key='proposal_id') }}
+{{ config(unique_key='proposal_region_band_id') }}
 
 with
 
@@ -55,7 +60,13 @@ proposal_dates as (
 
 region_bands as (
     select
-        proposal_bands.band_id,
+        {{ dbt_utils.generate_surrogate_key([
+            'prop_regions.proposal_id',
+            'prop_regions.region_id',
+            'proposal_bands.band_name'
+        ]) }} as proposal_region_band_id,
+        -- nulo si el proyecto no tiene bandas (alma_hash_key devuelve nulo con entrada nula)
+        {{ alma_band_id('proposal_bands.band_name') }} as band_id,
         prop_regions.proposal_hash_id,
         prop_regions.proposal_id,
         prop_regions.region_id,
@@ -78,6 +89,7 @@ region_bands as (
 
 final as (
     select
+        region_bands.proposal_region_band_id,
         region_bands.band_id,
         region_bands.proposal_id,
         region_bands.region_id,
