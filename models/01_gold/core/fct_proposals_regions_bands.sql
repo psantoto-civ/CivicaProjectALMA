@@ -74,7 +74,7 @@ region_bands as (
         prop_regions.total_time_setup_reg,
         prop_regions.total_time_reg,
         -- nº de filas de banda del par proyecto × región = nº de bandas del proyecto (1 si no tiene)
-        1 / count(*) over (
+        cast(1 as float) / count(*) over (
             partition by prop_regions.proposal_hash_id, prop_regions.region_id
         ) as band_weight,
         greatest(

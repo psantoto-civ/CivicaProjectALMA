@@ -17,21 +17,6 @@ docs-paths: ["docs"]
 clean-targets: ["target", "dbt_packages"]
 
 
-# ========================= Variables =========================
-# example
-#vars:
-#  # Presupuesto anterior a esta fecha se descarta en slv_google_sheets__budget
-#  budget_start_date: '2020-01-01'
-#  # Por debajo de este número de unidades, dim_products marca 'low_stock'
-#  low_stock_threshold: 10
-
-
-# ========================= Hooks =========================
-# example
-#on-run-end:
-#  - "{{ log_run_summary(results) }}"
-
-
 # ========================= Models =========================
 models:
   CivicaProjectALMA:
@@ -50,12 +35,15 @@ models:
         +incremental_strategy: merge
 
     01_gold:
-        +database: "{{ env_var('DBT_GOLD_DB') }}"
-        intermediate:
-          +schema: intermediate
-          +materialized: view
-        core:
-          +schema: core
-          +materialized: incremental
-          +incremental_strategy: merge
+      +database: "{{ env_var('DBT_GOLD_DB') }}"
+      intermediate:
+        +schema: intermediate
+        +materialized: view
+      core:
+        +schema: core
+        +materialized: incremental
+        +incremental_strategy: merge
+        +on_schema_change: fail
+        +contract:
+          enforced: true
    
