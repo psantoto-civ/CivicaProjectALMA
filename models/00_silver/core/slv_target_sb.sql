@@ -3,6 +3,7 @@
 -- Grano: objetivo dentro de una member OUS (member_ous_uid + target_name).
 -- group by all: si un atributo no es constante en este nivel, salen filas repetidas
 -- y falla el test unique de target_sb_id.
+-- data_rights y access_format van como texto (antes, FK a catálogos; 24-nov-2026).
 with
 
 target_sbs as (
@@ -16,8 +17,6 @@ target_sbs as (
         stg.t_exptime_s,
         stg.t_resolution_s,
         stg.s_resolution_arcsec,
-        stg.pol_xel as pol_xel,
-        stg.schedblock_name as schedblock_name,
         stg.pwv_mm,
         stg.asdm_uid,
         stg.science_observation,
@@ -35,6 +34,8 @@ target_sbs as (
         stg.data_rights,
         stg.access_format,
         stg.access_estsize_kb,
+        stg.pol_xel,
+        stg.schedblock_name,
         max(stg.date_load) as _date_load
     from {{ ref('stg_alma_obscore_clean') }} as stg
     {{ alma_changed_keys_filter(['member_ous_uid', 'target_name']) }}
@@ -52,8 +53,6 @@ final as (
         target_sbs.t_exptime_s,
         target_sbs.t_resolution_s,
         target_sbs.s_resolution_arcsec,
-        target_sbs.pol_xel as pol_xel,
-        target_sbs.schedblock_name as schedblock_name,
         target_sbs.pwv_mm,
         target_sbs.asdm_uid,
         target_sbs.science_observation,
@@ -67,10 +66,12 @@ final as (
         target_sbs.velocity_resolution_m_s,
         target_sbs.pol_states,
         {{ alma_target_id('target_sbs.gal_longitude_deg', 'target_sbs.gal_latitude_deg') }} as target_id,
-        {{ alma_data_rights_id('target_sbs.data_rights') }} as data_rights_id,
+        target_sbs.data_rights,
         {{ alma_sb_id('target_sbs.member_ous_uid') }} as sb_id,
-        {{ alma_access_format_id('target_sbs.access_format') }} as access_format_id,
+        target_sbs.access_format,
         target_sbs.access_estsize_kb,
+        target_sbs.pol_xel,
+        target_sbs.schedblock_name,
         target_sbs._date_load
     from target_sbs
 )

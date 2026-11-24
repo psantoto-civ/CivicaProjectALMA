@@ -1,4 +1,5 @@
 -- delete+insert por proyecto: se rehacen todos los pares de cada proyecto que cambia.
+-- band_name va como valor (antes, FK a slv_bands; 24-nov-2026). El hash de la banda se calcula en Gold.
 {{ config(unique_key='proposal_hash_id') }}
 
 with
@@ -18,7 +19,7 @@ final as (
     select
         {{ alma_hash_key(['proposal_bands.proposal_id', 'proposal_bands.band_name']) }} as prop_band_id,
         {{ alma_proposal_hash_id('proposal_bands.proposal_id') }} as proposal_hash_id,
-        {{ alma_band_id('proposal_bands.band_name') }} as band_id,
+        proposal_bands.band_name,
         proposal_bands._date_load
     from proposal_bands
     where proposal_bands.band_name is not null
