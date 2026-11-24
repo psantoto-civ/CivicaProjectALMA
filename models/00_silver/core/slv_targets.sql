@@ -2,6 +2,7 @@
 
 -- Grano: posición (gal_longitude_deg, gal_latitude_deg).
 
+with
 
 {% if is_incremental() %}
 changed_positions as (
