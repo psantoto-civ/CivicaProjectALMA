@@ -1,5 +1,4 @@
--- delete+insert por publicación: se rehacen todos los pares de cada bib_reference que cambia.
-{{ config(unique_key='publication_id') }}
+{{ config(unique_key='pub_author_id') }}
 
 with
 

@@ -17,10 +17,10 @@ final as (
         stg.em_resolution_m,
         stg.bandwidth_hz,
         stg.frequency_ghz,
-        {{ alma_scan_intent_id('stg.scan_intent') }} as scan_intent_id,
+        stg.scan_intent as scan_intent,
         {{ alma_target_sb_id('stg.member_ous_uid', 'stg.target_name') }} as target_sb_id,
-        {{ alma_dataproduct_type_id('stg.dataproduct_type') }} as dataproduct_type_id,
-        {{ alma_observation_ucd_id('stg.o_ucd') }} as observation_ucd_id,
+        stg.dataproduct_type as dataproduct_type,
+        stg.o_ucd as observation_ucd,
         stg.date_load as _date_load
     from {{ ref('stg_alma_obscore_clean') }} as stg
     {{ alma_new_rows_filter() }}

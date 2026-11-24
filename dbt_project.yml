@@ -47,7 +47,7 @@ models:
       core:
         +schema: core
         +materialized: incremental
-        +incremental_strategy: delete+insert
+        +incremental_strategy: merge
 
     01_gold:
         +database: "{{ env_var('DBT_GOLD_DB') }}"
@@ -57,5 +57,5 @@ models:
         core:
           +schema: core
           +materialized: incremental
-          +incremental_strategy: delete+insert
+          +incremental_strategy: merge
    
