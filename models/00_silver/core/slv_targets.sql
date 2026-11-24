@@ -1,6 +1,17 @@
 {{ config(unique_key='target_id') }}
 
+-- Grano: posición (gal_longitude_deg, gal_latitude_deg).
+
 with
+
+{% if is_incremental() %}
+changed_positions as (
+    select distinct
+        {{ alma_target_id('stg.gal_longitude_deg', 'stg.gal_latitude_deg') }} as target_id
+    from {{ ref('stg_alma_obscore_clean') }} as stg
+    where stg.date_load > {{ alma_watermark() }}
+),
+{% endif %}
 
 positions as (
     select
@@ -12,7 +23,11 @@ positions as (
         boolor_agg({{ alma_is_solar_system_target('stg.target_name') }}) as is_solar_system_target,
         max(stg.date_load) as _date_load
     from {{ ref('stg_alma_obscore_clean') }} as stg
-    {{ alma_changed_keys_filter(['gal_longitude_deg', 'gal_latitude_deg']) }}
+    {% if is_incremental() %}
+    where {{ alma_target_id('stg.gal_longitude_deg', 'stg.gal_latitude_deg') }} in (
+        select changed_positions.target_id from changed_positions
+    )
+    {% endif %}
     group by 1
 ),
 
@@ -47,15 +62,19 @@ changed as (
         recalculated._date_load
     from recalculated
     {% if is_incremental() %}
-    -- fuera las posiciones que ya están en la tabla con el mismo contenido
+    -- fuera las posiciones que ya están en la tabla sin cambio significativo
     left join {{ this }} as current_targets
         on current_targets.target_id = recalculated.target_id
     where current_targets.target_id is null
-        or not equal_null(current_targets.s_ra_deg, recalculated.s_ra_deg)
-        or not equal_null(current_targets.s_dec_deg, recalculated.s_dec_deg)
-        or not equal_null(current_targets.gal_longitude_deg, recalculated.gal_longitude_deg)
-        or not equal_null(current_targets.gal_latitude_deg, recalculated.gal_latitude_deg)
         or not equal_null(current_targets.region_id, recalculated.region_id)
+        or coalesce(abs(current_targets.s_ra_deg - recalculated.s_ra_deg) > 1e-9,
+                    not equal_null(current_targets.s_ra_deg, recalculated.s_ra_deg))
+        or coalesce(abs(current_targets.s_dec_deg - recalculated.s_dec_deg) > 1e-9,
+                    not equal_null(current_targets.s_dec_deg, recalculated.s_dec_deg))
+        or coalesce(abs(current_targets.gal_longitude_deg - recalculated.gal_longitude_deg) > 1e-9,
+                    not equal_null(current_targets.gal_longitude_deg, recalculated.gal_longitude_deg))
+        or coalesce(abs(current_targets.gal_latitude_deg - recalculated.gal_latitude_deg) > 1e-9,
+                    not equal_null(current_targets.gal_latitude_deg, recalculated.gal_latitude_deg))
     {% endif %}
 ),
 
