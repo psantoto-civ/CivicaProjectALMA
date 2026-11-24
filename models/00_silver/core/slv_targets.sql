@@ -1,8 +1,5 @@
 {{ config(unique_key='target_id') }}
 
--- Grano: posición (gal_longitude_deg, gal_latitude_deg).
--- La región se asigna con el seed.
--- Una posición cuenta como Sistema Solar si alguno de sus objetivos tiene nombre del Sistema Solar.
 with
 
 positions as (
@@ -25,7 +22,7 @@ target_regions as (
         'gal_longitude_deg', 'gal_latitude_deg', 'is_solar_system_target') }}
 ),
 
-final as (
+recalculated as (
     select
         positions.target_id,
         positions.s_ra_deg,
@@ -37,6 +34,41 @@ final as (
     from positions
     inner join target_regions
         on target_regions.target_id = positions.target_id
+),
+
+changed as (
+    select
+        recalculated.target_id,
+        recalculated.s_ra_deg,
+        recalculated.s_dec_deg,
+        recalculated.gal_longitude_deg,
+        recalculated.gal_latitude_deg,
+        recalculated.region_id,
+        recalculated._date_load
+    from recalculated
+    {% if is_incremental() %}
+    -- fuera las posiciones que ya están en la tabla con el mismo contenido
+    left join {{ this }} as current_targets
+        on current_targets.target_id = recalculated.target_id
+    where current_targets.target_id is null
+        or not equal_null(current_targets.s_ra_deg, recalculated.s_ra_deg)
+        or not equal_null(current_targets.s_dec_deg, recalculated.s_dec_deg)
+        or not equal_null(current_targets.gal_longitude_deg, recalculated.gal_longitude_deg)
+        or not equal_null(current_targets.gal_latitude_deg, recalculated.gal_latitude_deg)
+        or not equal_null(current_targets.region_id, recalculated.region_id)
+    {% endif %}
+),
+
+final as (
+    select
+        changed.target_id,
+        changed.s_ra_deg,
+        changed.s_dec_deg,
+        changed.gal_longitude_deg,
+        changed.gal_latitude_deg,
+        changed.region_id,
+        changed._date_load
+    from changed
 )
 
 select * from final
