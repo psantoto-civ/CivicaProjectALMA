@@ -1,5 +1,4 @@
--- delete+insert por proyecto: se rehacen todos los pares de cada proyecto que cambia.
-{{ config(unique_key='proposal_hash_id') }}
+{{ config(unique_key='prop_author_id') }}
 
 with
 

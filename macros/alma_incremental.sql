@@ -1,7 +1,8 @@
 {#
-  Filtros incrementales de core (estrategia delete+insert).
-  Marca de agua: max(_date_load) de la propia tabla. Staging solo añade cargas con date_load
-  mayor que su máximo, así que una fila nueva o modificada siempre supera la marca.
+  Filtros incrementales de core (estrategia merge).
+  Marca de agua: max(_date_load) de la propia tabla.
+  Staging solo añade cargas con date_load mayor que su máximo,
+  así que una fila nueva o modificada siempre supera la marca.
   En la primera ejecución o con --full-refresh no filtran nada.
   Los modelos leen staging con el alias `stg`.
 #}

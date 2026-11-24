@@ -1,6 +1,6 @@
 -- delete+insert por proyecto: se rehacen todos los pares de cada proyecto que cambia.
 -- science_keyword va como valor (antes, FK a slv_keywords; 24-nov-2026). El hash se calcula en Gold.
-{{ config(unique_key='proposal_hash_id') }}
+{{ config(unique_key='prop_key_id') }}
 
 with
 
