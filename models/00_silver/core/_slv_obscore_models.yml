@@ -466,7 +466,7 @@ models:
         data_tests:
           - unique
           - not_null
-      - name: slv_instrument_name
+      - name: instrument_name
         data_tests:
           - unique
           - not_null
