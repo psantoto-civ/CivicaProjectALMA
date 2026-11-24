@@ -34,7 +34,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('target_sb')
+                to: ref('slv_target_sb')
                 field: target_sb_id
       - name: _date_load
 
@@ -69,7 +69,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('targets')
+                to: ref('slv_targets')
                 field: target_id
       - name: data_rights
       - name: sb_id
@@ -77,7 +77,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('scheduling_blocks')
+                to: ref('slv_scheduling_blocks')
                 field: sb_id
       - name: access_format
       - name: access_estsize_kb
@@ -100,7 +100,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('regions')
+                to: ref('slv_regions')
                 field: region_id
       - name: _date_load
 
@@ -147,13 +147,13 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('calib_level')
+                to: ref('slv_calib_level')
                 field: calib_level_id
       - name: group_ous_id
         data_tests:
           - relationships:
               arguments:
-                to: ref('group_ous')
+                to: ref('slv_group_ous')
                 field: group_ous_id
       - name: collections
       - name: proposal_hash_id
@@ -161,7 +161,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('proposals')
+                to: ref('slv_proposals')
                 field: proposal_hash_id
       - name: _date_load
 
@@ -204,26 +204,26 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('category')
+                to: ref('slv_category')
                 field: scientific_category_id
       - name: pi_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('pis')
+                to: ref('slv_pis')
                 field: pi_id
       - name: publication_id
         data_tests:
           - relationships:
               arguments:
-                to: ref('publications')
+                to: ref('slv_publications')
                 field: publication_id
       - name: observation_id
         data_tests:
           - relationships:
               arguments:
-                to: ref('observations')
+                to: ref('slv_observations')
                 field: observation_id
       - name: _date_load
 
@@ -238,7 +238,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('proposals')
+                to: ref('slv_proposals')
                 field: proposal_hash_id
       - name: science_keyword
         data_tests:
@@ -281,7 +281,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('proposals')
+                to: ref('slv_proposals')
                 field: proposal_hash_id
       - name: band_name
         data_tests:
@@ -305,7 +305,7 @@ models:
         data_tests:
           - relationships:
               arguments:
-                to: ref('authors')
+                to: ref('slv_authors')
                 field: author_id
       - name: _date_load
 
@@ -320,14 +320,14 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('publications')
+                to: ref('slv_publications')
                 field: publication_id
       - name: author_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('authors')
+                to: ref('slv_authors')
                 field: author_id
       - name: _date_load
 
@@ -342,14 +342,14 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('authors')
+                to: ref('slv_authors')
                 field: author_id
       - name: proposal_hash_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('proposals')
+                to: ref('slv_proposals')
                 field: proposal_hash_id
       - name: _date_load
 
@@ -380,35 +380,35 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('observing_programs')
+                to: ref('slv_observing_programs')
                 field: observing_program_id
       - name: obs_collections_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('obs_collections')
+                to: ref('slv_obs_collections')
                 field: obs_collections_id
       - name: obs_creator_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('obs_creators')
+                to: ref('slv_obs_creators')
                 field: obs_creator_id
       - name: facility_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('facilities')
+                to: ref('slv_facilities')
                 field: facility_id
       - name: instrument_id
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: ref('instruments')
+                to: ref('slv_instruments')
                 field: instrument_id
       - name: _date_load
 
